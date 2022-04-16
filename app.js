@@ -7,7 +7,8 @@ var mongoose = require('mongoose');
 var port = process.env.PORT || 4201;
 
 //Routes
-var clientRoutes = require('./components/client/ClientRoute');
+var clientRoutes = require('./src/components/client/client.route');
+var doctorRoutes = require('./src/components/doctor/doctor.route');
 
 require('dotenv').config();
 
@@ -35,6 +36,7 @@ app.use((req,res,next) =>{
 
 });
 
-app.use('/signup', clientRoutes);
+app.use('/client', clientRoutes);
+app.use('/doctor', doctorRoutes);
 
 module.exports = app;

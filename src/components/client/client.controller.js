@@ -1,6 +1,6 @@
 'use strict'
 
-var client = require('./ClientModel');
+var client = require('./client.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../../helpers/jwt');
 
@@ -26,6 +26,28 @@ const clientSignUp = async function(req, res){
     }
 }
 
+const clientLogin = async function(req,res){
+    var data = req.body;
+    var clientArr = [];
+
+    clientArr = await client.find({email:data.email});
+
+    if(clientArr.length == 0){
+        res.status(200).send({message:'User not found', data: undefined})
+    }else{
+        //Login
+        let user = clientArr[0];
+        bcrypt.compare(data.password, user.password, async function(error, check){
+            if(check){
+                res.status(200).send({data:user, token: jwt.createToken(user)});
+            }else{
+                res.status(200).send({message: 'Check the password'});
+            }
+        })
+    }
+}
+
 module.exports = {
-    clientSignUp
+    clientSignUp,
+    clientLogin
 }
