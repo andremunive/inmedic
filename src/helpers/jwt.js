@@ -5,7 +5,7 @@ const { JWT_SECRET } = process.env;
 // /**
 //  *
 //  * @param {Number} _id client._id
-//  * @param {String} email client.email
+//  * @param {String} email client.role
 //  * @returns {String}
 //  */
 
