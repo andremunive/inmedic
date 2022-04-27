@@ -1,5 +1,6 @@
 const Client = require('./client.model');
 const Doctor = require('../doctor/doctor.model');
+const Consult = require('../consulta/consultModel');
 const bcrypt = require("bcryptjs");
 const { generateAccessToken } = require('../../helpers/jwt');
 const ApiError = require('../../utils/ApiError');
@@ -68,27 +69,6 @@ const clientSignup = async (req, res, next) => {
      }
   };
 
-// const clientLogin = async (req,res,next)=> {
-//     var data = req.body;
-//     var clientArr = [];
-
-//     clientArr = await client.find({email:data.email});
-
-//     if(clientArr.length == 0){
-//         res.status(200).send({message:'User not found', data: undefined})
-//     }else{
-//         //Login
-//         let user = clientArr[0];
-//         bcrypt.compare(data.password, user.password, async function(error, check){
-//             if(check){
-//                 res.status(200).send({data:user, token: jwt.createToken(user)});
-//             }else{
-//                 res.status(200).send({message: 'Check the password'});
-//             }
-//         })
-//     }
-// };
-
 const ClientLogin = async (req,res,next)=> {
   try {
     // Get user input
@@ -115,28 +95,9 @@ const ClientLogin = async (req,res,next)=> {
   }
 };
 
-// const findDoctor = async (where) => {
-
-//   const doctor = await Doctor.findOne({ where });
-//   if (!doctor) {
-//     throw new ApiError('doctor not found', 400);
-//   }
-
-//   return doctor;
-// };
-
 const getDoctor = async (req, res, next) => {
-  // try {
-  //   const { params } = req;
-
-  //   const doctor = await findDoctor({ _id: Number(params._id) });
-
-  //   res.json(doctor);
-  // } catch (err) {
-  //   next(err);
-  // }
-
-  Doctor.find({ name: req.params.name }).exec()
+  
+  Doctor.find({ _id: req.params._id }).exec()
   .then((docs) => {
       res.status(200).json(docs); //
   })
@@ -146,9 +107,7 @@ const getDoctor = async (req, res, next) => {
   })
 console.log('rev')
 
-
 };
-
 
 
 module.exports = {
