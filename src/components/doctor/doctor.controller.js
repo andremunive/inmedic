@@ -95,26 +95,6 @@ const doctorLogin = async (req,res, next) => {
         next(err);
         console.log(err);
       }
-
-
-
-    // var doctorArr = [];
-
-    // doctorArr = await Doctor.find({email:data.email});
-
-    // // if(doctorArr.length == 0){
-    // //     res.status(200).send({message:'User not found', data: undefined})
-    // // }else{
-    // //     //Login
-    // //     let user = doctorArr[0];
-    // //     bcrypt.compare(data.password, user.password, async function(error, check){
-    // //         if(check){
-    // //             res.status(200).send({data:user, token: jwt.createToken(user)});
-    // //         }else{
-    // //             res.status(200).send({message: 'Check the password'});
-    // //         }
-    // //     })
-    // // }
 };
 
 module.exports = {
