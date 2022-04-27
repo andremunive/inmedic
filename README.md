@@ -5,6 +5,7 @@ Academic project addressed to the Universidad del Norte as presentation of the f
 ```
 npm install
 
-## Run development
-```
+## Run in development
+```bash
 npm start
+```
