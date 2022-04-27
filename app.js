@@ -4,6 +4,7 @@ const express = require("express");
 const ErrorSerializer = require('./src/Serializers/BaseSerializer');
 const clientRoutes = require('./src/components/client/client.route');
 const doctorRoutes = require('./src/components/doctor/doctor.route');
+//const consultRoutes = require('./src/components/consulta/consultRoute');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use((req,res,next) =>{
 
 app.use('/client' ,clientRoutes);
 app.use('/doctor', doctorRoutes);
+//app.use('/consult', consultRoutes);
 
 
 
@@ -62,25 +64,15 @@ app.use((req, res, next) => {
     //   console.log(error)
     // })
    
-    // create CLIENT
-     // //prueba mongo
-    // const clientModel = require ("./src/components/client/client.model"); 
+    //create CLIENT
+     //prueba mongo
+    // const consultModel = require ("./src/components/consulta/consultModel"); 
     // let resul;
-    // const newClient = {
-    //   "name":"Daniel",
-    //   "lastName" : "Meza",
-    //   "documentNumber": "1123456129",
-    //   "phoneNumber": "3003452289",
-    //   "address": "Cra.25 #45-04",
-    //   "perfil" : "foto.png",
-    //   "gender" : "Masculino",
-    //   "email": "danydaniel10m@hotmail.com",
-    //   "password" : "23456",
-    //   "birthDate" : "09/03/1999",
-    //   "role": "user"
+    // const newConsult = {
+
     // }
-    // clientModel.create(newClient).then((myClient)=>{
-    //    resul = myClient;
+    // consultModel.create(newConsult).then((myConsult)=>{
+    //    resul = myConsult;
     //    console.log("cliente prueba",resul);
     // }).catch((error)=>{
     //   console.log(error)
