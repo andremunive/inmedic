@@ -4,3 +4,7 @@ Academic project addressed to the Universidad del Norte as presentation of the f
 ## Setup
 ```
 npm install
+
+## Run development
+```
+npm start
