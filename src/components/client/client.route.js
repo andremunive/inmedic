@@ -1,12 +1,12 @@
-'use strict'
+const express = require("express");
+const ClientController = require('./client.controller');
+const {authMiddleware} = require('../../middleware/authMiddleware');
 
-var express = require("express")
-var clientController = require('./client.controller');
-
-var api = express.Router();
+const api = express.Router();
 
 //Create new client
-api.post('/signup', clientController.clientSignUp);
-api.post('/login', clientController.clientLogin);
+api.post('/signup', ClientController.clientSignup);
+api.post('/login', ClientController.ClientLogin);
+api.get('/:name', authMiddleware, ClientController.getDoctor);
 
 module.exports = api;
