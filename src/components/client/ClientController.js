@@ -109,20 +109,19 @@ const GetServices = async (req, res, next) => {
   }
 };
 
-const logOut = async (req, res, next) => {
-  try {
-      const user = await Client.findOne({_id: req.client._id});
-      const accessToken = req.headers.authorization ? req.headers.authorization.split(' ')[1] : "";
-      toInvalidTokens(accessToken);
-      res.json(new UserSerializer(user));
-    } catch (err) {
-      next(err);
-    }
-  };
+// const logOut = async (req, res, next) => {
+//   try {
+//       const user = await Client.findOne({_id: req.client._id});
+//       const accessToken = req.headers.authorization ? req.headers.authorization.split(' ')[1] : "";
+//       toInvalidTokens(accessToken);
+//       res.json(new UserSerializer(user));
+//     } catch (err) {
+//       next(err);
+//     }
+//   };
 
 
 module.exports = {
     clientSignup,
     GetServices,
-    logOut
 };

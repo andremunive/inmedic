@@ -9,6 +9,6 @@ const api = express.Router();
 api.post('/signup', ClientController.clientSignup);
 //api.post('/login', ClientController.ClientLogin);
 api.get('/services/:specialization', authCLientMiddleware, paginationMiddleware, ClientController.GetServices);
-api.post('/logout',authCLientMiddleware, ClientController.logOut)
+// api.post('/logout',authCLientMiddleware, ClientController.logOut)
 
 module.exports = api;
