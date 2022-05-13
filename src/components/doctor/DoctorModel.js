@@ -45,8 +45,17 @@ var DoctorSchema = Schema({
         type: String,
         required: true
     },
+    lastLoginDate: {
+        type: Date,
+        default: null,
+    },
+    active: {
+        type: Boolean,
+        default: true,
+    },
     role: {
         type: String,
+        default: 'doctor',
         required: true
     },
     specialization: {

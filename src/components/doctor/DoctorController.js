@@ -1,4 +1,4 @@
-const Doctor = require('./doctor.model');
+const Doctor = require('./DoctorModel');
 const bcrypt = require("bcryptjs");
 const { generateAccessToken } = require('../../helpers/jwt');
 const ApiError = require('../../utils/ApiError');
@@ -70,34 +70,33 @@ const doctorSignUp = async (req, res,next) => {
     // }
 };
 
-const doctorLogin = async (req,res, next) => {
+// const doctorLogin = async (req,res, next) => {
 
-    try {
-        // Get user input
-        const { email, password } = req.body;
+//     try {
+//         // Get user input
+//         const { email, password } = req.body;
     
-        // Validate user input
-        if (!(email && password)) {
-          res.status(400).json({message: "All input is required" } );
-        }
-        // Validate if user exist in our database
-        const doctor = await Doctor.findOne({ email });
+//         // Validate user input
+//         if (!(email && password)) {
+//           res.status(400).json({message: "All input is required" } );
+//         }
+//         // Validate if user exist in our database
+//         const doctor = await Doctor.findOne({ email });
     
-        if (doctor && (await bcrypt.compare(password, doctor.password))) {
+//         if (doctor && (await bcrypt.compare(password, doctor.password))) {
     
-          const accessToken = generateAccessToken(doctor._id, doctor.role);
-          res.status(200).json({accessToken});
-        }else{
-          res.status(404).json({message: "User not found"});
-        }
+//           const accessToken = generateAccessToken(doctor._id, doctor.role);
+//           res.status(200).json({accessToken});
+//         }else{
+//           res.status(404).json({message: "User not found"});
+//         }
         
-      } catch (err) {
-        next(err);
-        console.log(err);
-      }
-};
+//       } catch (err) {
+//         next(err);
+//         console.log(err);
+//       }
+// };
 
 module.exports = {
-    doctorSignUp,
-    doctorLogin
+    doctorSignUp
 }
