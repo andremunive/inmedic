@@ -2,8 +2,9 @@ require("dotenv").config();
 require("./src/config/database").connect();
 const express = require("express");
 const ErrorSerializer = require('./src/Serializers/BaseSerializer');
-const clientRoutes = require('./src/components/client/client.route');
-const doctorRoutes = require('./src/components/doctor/doctor.route');
+const clientRoutes = require('./src/components/client/ClientRoute');
+const doctorRoutes = require('./src/components/doctor/DoctorRoute');
+const userRoutes = require('./src/components/user/UserRoute');
 //const consultRoutes = require('./src/components/consulta/consultRoute');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use((req,res,next) =>{
 
 app.use('/client' ,clientRoutes);
 app.use('/doctor', doctorRoutes);
+app.use('/user', userRoutes);
 //app.use('/consult', consultRoutes);
 
 
