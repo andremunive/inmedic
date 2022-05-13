@@ -10,7 +10,7 @@ class UserSerializer extends BaseSerializer {
     delete serializedModel?.birthDate;
     delete serializedModel?.documentNumber;
     delete serializedModel?.gender;
-    delete serializedModel?.lastLoginDate;
+    
 
     super('success', serializedModel);
   }
