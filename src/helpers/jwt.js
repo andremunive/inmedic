@@ -4,8 +4,8 @@ const { JWT_SECRET } = process.env;
 
 // /**
 //  *
-//  * @param {Number} _id client._id
-//  * @param {String} email client.role
+//  * @param {Number} _id user._id
+//  * @param {String} email user.role
 //  * @returns {String}
 //  */
 
@@ -22,9 +22,21 @@ function verifyAccessToken(token) {
   return jwt.verify(token, JWT_SECRET);
 }
 
+let invalidTokens = [];
+
+function toInvalidTokensVerify(token) {
+  return invalidTokens.includes(token);
+}
+
+function toInvalidTokens(token) {
+  invalidTokens.push(token);
+}
+
 module.exports = {
   generateAccessToken,
   verifyAccessToken,
+  toInvalidTokens,
+  toInvalidTokensVerify
 };
 
 // var jwt = require('jwt-simple');
