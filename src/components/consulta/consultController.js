@@ -1,5 +1,5 @@
-const Client = require('../client/client.model');
-const Doctor = require('../doctor/doctor.model');
+const Client = require('../client/ClientModel');
+const Doctor = require('../doctor/DoctorModel');
 const ConsultSchema = require('./consultModel');
 
 const Consult = async (req, res,next) => {

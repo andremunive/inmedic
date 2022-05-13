@@ -1,6 +1,6 @@
 const express = require("express");
 const ConsultController = require('./consultController');
-const {authDoctorMiddleware} = require('../doctor/doctorMiddleware');
+const {authDoctorMiddleware} = require('../doctor/DoctorMiddleware');
 
 const api = express.Router();
 
