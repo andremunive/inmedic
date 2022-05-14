@@ -98,9 +98,23 @@ const clientSignup = async (req, res, next) => {
 const GetServices = async (req, res, next) => {
 
   try {
-    const {params} = req;
+    const { search } = req.body;
+    const specialization = await Doctor.findOne({specialization: search});
+    console.log("specialization:", specialization);
+    const name = await Doctor.findOne({name: search});
+    console.log("name: ", name);
+    const service = await Doctor.findOne({service: search});
+    console.log("service: ", service);
 
-    const doctor = await Doctor.find({specialization: params.specialization});
+    if(specialization) {
+      doctor = specialization;
+    }else {
+      if (name){
+        doctor = name;
+      } else {
+        doctor = service;
+      }
+    }
 
     res.json(new DoctorsSerializer(doctor, await req.getPaginationInfo(Doctor)));
 

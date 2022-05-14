@@ -6,7 +6,7 @@ var DoctorSchema = Schema({
         type: String,
         required: true
     },
-    lastName: {
+    lastname: {
         type: String,
         required: true
     },
@@ -19,6 +19,10 @@ var DoctorSchema = Schema({
         required: true
     },
     address: {
+        type: String,
+        required: true
+    },
+    city: {
         type: String,
         required: true
     },
