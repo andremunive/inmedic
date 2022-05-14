@@ -7,8 +7,7 @@ const api = express.Router();
 
 //Create new client
 api.post('/signup', ClientController.clientSignup);
-//api.post('/login', ClientController.ClientLogin);
-api.get('/services/:specialization', authCLientMiddleware, paginationMiddleware, ClientController.GetServices);
-// api.post('/logout',authCLientMiddleware, ClientController.logOut)
+// Get service
+api.post('/services/all', authCLientMiddleware, paginationMiddleware, ClientController.GetServices);
 
 module.exports = api;

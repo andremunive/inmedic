@@ -8,5 +8,6 @@ const api = express.Router();
 api.post('/signup', doctorController.doctorSignUp);
 //api.post('/login', doctorController.doctorLogin);
 api.post('/services', authDoctorMiddleware, consultController.Consult);
+//api.post('/doctor', authDoctorMiddleware, doctorController)
 
 module.exports = api;

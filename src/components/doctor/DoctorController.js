@@ -48,54 +48,14 @@ const doctorSignUp = async (req, res,next) => {
     } catch (err) {
         next(err);
     }
-  
-
-
-    // var doctorArr = [];
-
-    // doctorArr = await Doctor.find({email:data.email});
-
-    // if(doctorArr.length == 0 && data.password){
-    //     bcrypt.hash(data.password,null,null, async function(err, hash){
-    //         if(hash){
-    //             data.password = hash;
-    //             var signUp = await Doctor.create(data);
-    //             res.status(200).send();
-    //         }else{
-    //             res.status(200).send({message:'Error encrypting password', data: undefined});
-    //         }
-    //     })
-    // }else{
-    //     res.status(200).send({message:'Error on data. ', data: undefined});
-    // }
 };
 
-// const doctorLogin = async (req,res, next) => {
+const addPrescription = async (req,res,next) => {
+  const {details} = req.body;
+  
 
-//     try {
-//         // Get user input
-//         const { email, password } = req.body;
-    
-//         // Validate user input
-//         if (!(email && password)) {
-//           res.status(400).json({message: "All input is required" } );
-//         }
-//         // Validate if user exist in our database
-//         const doctor = await Doctor.findOne({ email });
-    
-//         if (doctor && (await bcrypt.compare(password, doctor.password))) {
-    
-//           const accessToken = generateAccessToken(doctor._id, doctor.role);
-//           res.status(200).json({accessToken});
-//         }else{
-//           res.status(404).json({message: "User not found"});
-//         }
-        
-//       } catch (err) {
-//         next(err);
-//         console.log(err);
-//       }
-// };
+}
+
 
 module.exports = {
     doctorSignUp
