@@ -98,23 +98,32 @@ const clientSignup = async (req, res, next) => {
 const GetServices = async (req, res, next) => {
 
   try {
-    const { search } = req.body;
-    const specialization = await Doctor.findOne({specialization: search});
-    console.log("specialization:", specialization);
-    const name = await Doctor.findOne({name: search});
-    console.log("name: ", name);
-    const service = await Doctor.findOne({service: search});
-    console.log("service: ", service);
+    const {body} = req;
 
-    if(specialization) {
+    const specialization = await Doctor.find({specialization: body.search});
+    console.log(specialization);
+    const name = await Doctor.find({name: body.search});
+    console.log(name);
+    const services = await Doctor.find({services: body.search});
+    console.log(services);
+
+    if(specialization.length){
+      console.log("ENTRO 1");
       doctor = specialization;
     }else {
-      if (name){
+      if (name.length) {
+        console.log("ENTRO 2");
         doctor = name;
       } else {
-        doctor = service;
+        if (services.length) {
+          console.log("ENTRO 3");
+          doctor = services;
+        } else {
+          throw new ApiError("No found", 400);
+        }
       }
     }
+    
 
     res.json(new DoctorsSerializer(doctor, await req.getPaginationInfo(Doctor)));
 
