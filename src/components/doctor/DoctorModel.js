@@ -14,6 +14,10 @@ var DoctorSchema = Schema({
         type: String,
         required: true
     },
+    professionalCard: {
+        type: String,
+        required: true
+    },
     phoneNumber: {
         type: String,
         required: true

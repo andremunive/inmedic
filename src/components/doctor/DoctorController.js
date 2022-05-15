@@ -1,5 +1,6 @@
 const Doctor = require('./DoctorModel');
 const bcrypt = require("bcryptjs");
+const ConsultSchema = require('./ConsultModel');
 const { generateAccessToken } = require('../../helpers/jwt');
 const ApiError = require('../../utils/ApiError');
 
@@ -56,7 +57,34 @@ const addPrescription = async (req,res,next) => {
 
 }
 
+const Addconsult = async (req, res,next) => {
+
+  try {
+    const doctor = await Doctor.findOne({name: req.params.name});
+    console.log(doctor);
+    //req.isUserAuthorized(doctor);
+
+    if(!doctor)  throw new ApiError("User not found", 400);
+  
+    let consult = new ConsultSchema({
+        idDoctor: doctor._id,
+        tipoConsulta: req.body.tipoConsulta,
+        precio: req.body.precio,
+    })
+  
+    consult = await consult.save();
+  
+    if(!consult) 
+     throw new ApiError("consult cannot be created ", 500);
+  
+    res.status(200).json(consult);
+
+  } catch(err) {
+    next(err);
+  }
+};
 
 module.exports = {
-    doctorSignUp
+    doctorSignUp,
+    Addconsult
 }

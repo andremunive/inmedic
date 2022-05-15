@@ -1,8 +1,7 @@
 const Client = require('./ClientModel');
 const Doctor = require('../doctor/DoctorModel');
-const Consult = require('../consulta/consultModel');
+//const Consult = require('../doctor/ConsultModel');
 const bcrypt = require("bcryptjs");
-const { generateAccessToken ,toInvalidTokens } = require('../../helpers/jwt');
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
 const DoctorsSerializer = require('../../Serializers/DoctorsSerializer');
@@ -69,42 +68,17 @@ const clientSignup = async (req, res, next) => {
      }
   };
 
-// const ClientLogin = async (req,res,next)=> {
-//   try {
-//     // Get user input
-//     const { email, password } = req.body;
-
-//     // Validate user input
-//     if (!(email && password)) {
-//       res.status(400).json({message: "All input is required" } );
-//     }
-//     // Validate if user exist in our database
-//     const client = await Client.findOne({ email });
-
-//     if (client && (await bcrypt.compare(password, client.password))) {
-
-//       const accessToken = generateAccessToken(client._id, client.role);
-//       res.status(200).json({accessToken});
-//     }else{
-//       res.status(404).json({message: "User not found"});
-//     }
-    
-//   } catch (err) {
-//     next(err);
-//     console.log(err);
-//   }
-// };
 
 const GetServices = async (req, res, next) => {
 
   try {
-    const {body} = req;
-
-    const specialization = await Doctor.find({specialization: body.search});
+    const {params} = req;
+    req.isRole('user');
+    const specialization = await Doctor.find({specialization: params.search});
     console.log(specialization);
-    const name = await Doctor.find({name: body.search});
+    const name = await Doctor.find({name: params.search});
     console.log(name);
-    const services = await Doctor.find({services: body.search});
+    const services = await Doctor.find({services: params.search});
     console.log(services);
 
     if(specialization.length){
