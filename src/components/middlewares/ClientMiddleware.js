@@ -1,4 +1,4 @@
-const { verifyAccessToken } = require('../../helpers/jwt');
+const { verifyAccessToken , toInvalidTokensVerify } = require('../../helpers/jwt');
 const ApiError = require('../../utils/ApiError');
 
 function authCLientMiddleware(req, res, next) {
@@ -24,6 +24,11 @@ function authCLientMiddleware(req, res, next) {
     }else{
       throw new ApiError('Role not authorized', 403);
     }
+
+    if (toInvalidTokensVerify(accessToken)){
+      console.log("DANIEL 3")
+      throw new ApiError('error', 401);
+    };
 
     req.client = client;
     // req.isRole = isRole;

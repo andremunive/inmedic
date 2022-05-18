@@ -1,9 +1,7 @@
-'use strict'
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var DoctorSchema = Schema({
+var ClientSchema = Schema({
     name: {
         type: String,
         required: true
@@ -41,23 +39,24 @@ var DoctorSchema = Schema({
         type: String,
         required: true
     },
+    active: {
+        type: Boolean,
+        default: true,
+    },
     birthDate: {
         type: String,
         required: true
     },
+    lastLoginDate: {
+        type: Date,
+        default: null,
+    },
     role: {
         type: String,
+        default: 'user',
         required: true
     },
-    specialization: {
-        type: String,
-        required: true
-    },
-    services: {
-        type: [String],
-        default: [],
-        required: true
-    }
+    
 });
 
-module.exports = mongoose.model('doctor', DoctorSchema);
+module.exports = mongoose.model('client', ClientSchema);

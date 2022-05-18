@@ -1,16 +1,20 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var ClientSchema = Schema({
+var DoctorSchema = Schema({
     name: {
         type: String,
         required: true
     },
-    lastName: {
+    lastname: {
         type: String,
         required: true
     },
     documentNumber: {
+        type: String,
+        required: true
+    },
+    professionalCard: {
         type: String,
         required: true
     },
@@ -19,6 +23,10 @@ var ClientSchema = Schema({
         required: true
     },
     address: {
+        type: String,
+        required: true
+    },
+    city: {
         type: String,
         required: true
     },
@@ -43,11 +51,28 @@ var ClientSchema = Schema({
         type: String,
         required: true
     },
+    lastLoginDate: {
+        type: Date,
+        default: null,
+    },
+    active: {
+        type: Boolean,
+        default: true,
+    },
     role: {
+        type: String,
+        default: 'doctor',
+        required: true
+    },
+    specialization: {
         type: String,
         required: true
     },
-    
+    services: {
+        type: [String],
+        default: [],
+        required: true
+    }
 });
 
-module.exports = mongoose.model('client', ClientSchema);
+module.exports = mongoose.model('doctor', DoctorSchema);
