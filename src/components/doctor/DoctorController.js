@@ -1,7 +1,6 @@
 const Doctor = require('./DoctorModel');
 const bcrypt = require("bcryptjs");
 const ConsultSchema = require('./ConsultModel');
-const { generateAccessToken } = require('../../helpers/jwt');
 const ApiError = require('../../utils/ApiError');
 
 const doctorSignUp = async (req, res,next) => {
