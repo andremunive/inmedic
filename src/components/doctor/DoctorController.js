@@ -59,10 +59,11 @@ const addPrescription = async (req,res,next) => {
 const Addconsult = async (req, res,next) => {
 
   try {
-    req.isRole("doctor");
+    //req.isRole("doctor");
     const {body, params} = req;
-    const doctor = await Doctor.findOne({name: params.name});
+    const doctor = await Doctor.findOne({name: params._id});
     console.log(doctor);
+    req.isUserAuthorized(doctor);
     
 
     if(!doctor)  throw new ApiError("User not found", 400);

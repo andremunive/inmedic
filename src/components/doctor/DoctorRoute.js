@@ -7,6 +7,6 @@ const api = express.Router();
 //Create new doctor
 api.post('/signup', doctorController.doctorSignUp);
 //Add doctor consult
-api.post('/:name', authMiddleware, doctorController.Addconsult);
+api.post('/:_id', authMiddleware, doctorController.Addconsult);
 
 module.exports = api;
