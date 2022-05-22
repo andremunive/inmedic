@@ -1,6 +1,5 @@
 const Client = require('./ClientModel');
 const Doctor = require('../doctor/DoctorModel');
-//const Consult = require('../doctor/ConsultModel');
 const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
@@ -127,17 +126,6 @@ const ProfileDoctor = async (req, res, next) => {
     next(err);
   }
 };
-
-// const logOut = async (req, res, next) => {
-//   try {
-//       const user = await Client.findOne({_id: req.client._id});
-//       const accessToken = req.headers.authorization ? req.headers.authorization.split(' ')[1] : "";
-//       toInvalidTokens(accessToken);
-//       res.json(new UserSerializer(user));
-//     } catch (err) {
-//       next(err);
-//     }
-//   };
 
 
 module.exports = {
