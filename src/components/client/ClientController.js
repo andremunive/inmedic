@@ -116,7 +116,7 @@ const ProfileDoctor = async (req, res, next) => {
     console.log("Profile doctor: ",profileDoctor);
 
 
-    if (! profileDoctor) return new ApiError("Profile doctor not found", 400);
+    if (! profileDoctor.length) return new ApiError("Profile doctor not found", 400);
 
     
 
