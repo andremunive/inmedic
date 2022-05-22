@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
 const DoctorsSerializer = require('../../Serializers/DoctorsSerializer');
+const ConsultModel = require('../doctor/ConsultModel');
 
 const clientSignup = async (req, res, next) => {
      try {
@@ -72,13 +73,13 @@ const clientSignup = async (req, res, next) => {
 const GetServices = async (req, res, next) => {
 
   try {
-    const {params} = req;
+    const {body} = req;
     req.isRole('user');
-    const specialization = await Doctor.find({specialization: params.search});
+    const specialization = await Doctor.find({specialization: body.search});
     console.log(specialization);
-    const name = await Doctor.find({name: params.search});
+    const name = await Doctor.find({name: body.search});
     console.log(name);
-    const services = await Doctor.find({services: params.search});
+    const services = await Doctor.find({services: body.search});
     console.log(services);
 
     if(specialization.length){
@@ -106,6 +107,27 @@ const GetServices = async (req, res, next) => {
   }
 };
 
+const ProfileDoctor = async (req, res, next) => {
+
+  try {
+    const {params} = req;
+    req.isRole('user');
+
+    const profileDoctor = await ConsultModel.find({idDoctor: params.idDoctor});
+    console.log("Profile doctor: ",profileDoctor);
+
+
+    if (! profileDoctor) return new ApiError("Profile doctor not found", 400);
+
+    
+
+    res.status(200).json(profileDoctor);
+
+  } catch (err) {
+    next(err);
+  }
+};
+
 // const logOut = async (req, res, next) => {
 //   try {
 //       const user = await Client.findOne({_id: req.client._id});
@@ -121,4 +143,5 @@ const GetServices = async (req, res, next) => {
 module.exports = {
     clientSignup,
     GetServices,
+    ProfileDoctor,
 };

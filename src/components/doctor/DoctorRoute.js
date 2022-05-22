@@ -4,7 +4,7 @@ const doctorController = require('./DoctorController');
 const {authMiddleware} = require('../middlewares/UserMiddleware')
 const api = express.Router();
 
-//Create new client
+//Create new doctor
 api.post('/signup', doctorController.doctorSignUp);
 //Add doctor consult
 api.post('/:name', authMiddleware, doctorController.Addconsult);
