@@ -60,14 +60,19 @@ const addPrescription = async (req,res,next) => {
 const Addconsult = async (req, res,next) => {
 
   try {
-    const doctor = await Doctor.findOne({name: req.params.name});
+    req.isRole("doctor");
+    const {body, params} = req;
+    const doctor = await Doctor.findOne({name: params.name});
     console.log(doctor);
-    //req.isUserAuthorized(doctor);
+    
 
     if(!doctor)  throw new ApiError("User not found", 400);
   
     let consult = new ConsultSchema({
         idDoctor: doctor._id,
+        description: body.description,
+        description2: body.description2,
+        services: doctor.services,
         tipoConsulta: req.body.tipoConsulta,
         precio: req.body.precio,
     })
