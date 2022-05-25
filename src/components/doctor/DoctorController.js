@@ -72,10 +72,15 @@ const Addconsult = async (req, res,next) => {
     
 
     if(!doctor)  throw new ApiError("User not found", 400);
+
+    const image = await cloudinary.v2.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
+    { public_id: "olympic_flag" });
+
+    console.log(image);
   
     let consult = new ConsultSchema({
         idDoctor: doctor._id,
-        perfil: doctor.perfil,
+        perfil: image.url,
         name: doctor.name,
         description: body.description,
         description2: body.description2,
@@ -85,10 +90,8 @@ const Addconsult = async (req, res,next) => {
         precio: body.precio,
     });
 
-    const image = await cloudinary.v2.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
-    { public_id: "olympic_flag" });
 
-    console.log(image);
+   
      
 
     
