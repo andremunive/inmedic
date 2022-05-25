@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ReviewSchema = Schema ({
-    idConsult: {
+    idDoctor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'consult',
+        ref: 'doctor',
         required: true
     },
     comments: {

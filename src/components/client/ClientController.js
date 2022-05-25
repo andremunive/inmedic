@@ -1,10 +1,12 @@
 const Client = require('./ClientModel');
 const Doctor = require('../doctor/DoctorModel');
-//const Consult = require('../doctor/ConsultModel');
 const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
 const DoctorsSerializer = require('../../Serializers/DoctorsSerializer');
+
+const consultModel = require('../doctor/ConsultModel');
+const ConsultSerializer = require('../../Serializers/ConsultSerializer');
 
 const clientSignup = async (req, res, next) => {
      try {
@@ -69,42 +71,56 @@ const clientSignup = async (req, res, next) => {
   };
 
 
-const GetServices = async (req, res, next) => {
+  const GetServices = async (req, res, next) => {
 
-  try {
-    const {params} = req;
-    req.isRole('user');
-    const specialization = await Doctor.find({specialization: params.search});
-    console.log(specialization);
-    const name = await Doctor.find({name: params.search});
-    console.log(name);
-    const services = await Doctor.find({services: params.search});
-    console.log(services);
+    try {
+      const {body} = req;
+      req.isRole('user');
+     console.log("search: ", body.search);
+     console.log("city: ", body.city);
 
-    if(specialization.length){
-      console.log("ENTRO 1");
-      doctor = specialization;
-    }else {
-      if (name.length) {
-        console.log("ENTRO 2");
-        doctor = name;
-      } else {
-        if (services.length) {
-          console.log("ENTRO 3");
-          doctor = services;
-        } else {
-          throw new ApiError("No found", 400);
-        }
-      }
+      const doctorBySpecialization = await Doctor.find({specialization:{$regex: body.search.trim(), $options: "$i"}, 
+      city: {$regex: body.city.trim(), $options: "i"}});
+
+      const doctorByName = await Doctor.find({name:{$regex: body.search.trim(), $options: "$i"}, 
+      city: {$regex: body.city.trim(), $options: "i"}});
+
+      const doctorByServices = await Doctor.find({services:{$regex: body.search.trim(), $options: "$i"}, 
+      city: {$regex: body.city.trim(), $options: "i"}});
+      
+        let doctor = [];
+        doctor = doctorByServices.length ? doctorByServices : doctor;
+        doctor = doctorByName.length ? doctorByName : doctor;
+        doctor = doctorBySpecialization.length ? doctorBySpecialization : doctor;
+
+        let resultConsults = [];
+        let myIndex = 0;
+
+        doctor.forEach(async (doc) => {
+          await consultModel.find({name: doc.name}).then((profileSearch)=> {
+            resultConsults= [...resultConsults,...profileSearch];
+            myIndex += 1;
+            console.log("#######******",resultConsults);
+            
+            if (myIndex === doctor.length) {
+
+              if (resultConsults.length === 0 ) {
+                res.send({status: "user not found", data: null});
+              } else {
+              res.json(new ConsultSerializer(resultConsults));
+              }
+            }
+          })
+        })  
+
+
+      
+
+  
+    } catch (err) {
+      next(err);
     }
-    
-
-    res.json(new DoctorsSerializer(doctor, await req.getPaginationInfo(Doctor)));
-
-  } catch (err) {
-    next(err);
-  }
-};
+  };
 
 // const logOut = async (req, res, next) => {
 //   try {
@@ -117,8 +133,31 @@ const GetServices = async (req, res, next) => {
 //     }
 //   };
 
+const ProfileDoctor = async (req, res, next) => {
+
+  try {
+    const {params} = req;
+    req.isRole('user');
+
+    const profileDoctor = await ConsultModel.find({idDoctor: params.idDoctor});
+    console.log("Profile doctor: ",profileDoctor);
+
+
+    if (! profileDoctor) return new ApiError("Profile doctor not found", 400);
+
+    
+
+    res.status(200).json(profileDoctor);
+
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 
 module.exports = {
     clientSignup,
     GetServices,
+    ProfileDoctor
 };

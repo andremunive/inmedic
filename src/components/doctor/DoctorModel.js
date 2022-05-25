@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var DoctorSchema = Schema({
     name: {
         type: String,
-        required: true
+        required: false
     },
     lastname: {
         type: String,
@@ -28,7 +28,7 @@ var DoctorSchema = Schema({
     },
     city: {
         type: String,
-        required: true
+        required: false
     },
     perfil: {
         type: String,
@@ -66,12 +66,12 @@ var DoctorSchema = Schema({
     },
     specialization: {
         type: String,
-        required: true
+        required: false
     },
     services: {
         type: [String],
         default: [],
-        required: true
+        required: false
     }
 });
 
