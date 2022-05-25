@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
 const DoctorsSerializer = require('../../Serializers/DoctorsSerializer');
+const ConsultModel = require('../doctor/ConsultModel');
 
 const consultModel = require('../doctor/ConsultModel');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
@@ -73,11 +74,41 @@ const clientSignup = async (req, res, next) => {
 
   const GetServices = async (req, res, next) => {
 
+<<<<<<< HEAD
     try {
       const {body} = req;
       req.isRole('user');
      console.log("search: ", body.search);
      console.log("city: ", body.city);
+=======
+  try {
+    const {body} = req;
+    req.isRole('user');
+    const specialization = await Doctor.find({specialization: body.search});
+    console.log(specialization);
+    const name = await Doctor.find({name: body.search});
+    console.log(name);
+    const services = await Doctor.find({services: body.search});
+    console.log(services);
+
+    if(specialization.length){
+      console.log("ENTRO 1");
+      doctor = specialization;
+    }else {
+      if (name.length) {
+        console.log("ENTRO 2");
+        doctor = name;
+      } else {
+        if (services.length) {
+          console.log("ENTRO 3");
+          doctor = services;
+        } else {
+          throw new ApiError("No found", 400);
+        }
+      }
+    }
+    
+>>>>>>> 98c6fb10fd804a92fcb1a1e99993d8ccf6c15099
 
       const doctorBySpecialization = await Doctor.find({specialization:{$regex: body.search.trim(), $options: "$i"}, 
       city: {$regex: body.city.trim(), $options: "i"}});
@@ -122,16 +153,26 @@ const clientSignup = async (req, res, next) => {
     }
   };
 
-// const logOut = async (req, res, next) => {
-//   try {
-//       const user = await Client.findOne({_id: req.client._id});
-//       const accessToken = req.headers.authorization ? req.headers.authorization.split(' ')[1] : "";
-//       toInvalidTokens(accessToken);
-//       res.json(new UserSerializer(user));
-//     } catch (err) {
-//       next(err);
-//     }
-//   };
+const ProfileDoctor = async (req, res, next) => {
+
+  try {
+    const {params} = req;
+    req.isRole('user');
+
+    const profileDoctor = await ConsultModel.find({idDoctor: params.idDoctor});
+    console.log("Profile doctor: ",profileDoctor);
+
+
+    if (! profileDoctor.length) return new ApiError("Profile doctor not found", 400);
+
+    
+
+    res.status(200).json(profileDoctor);
+
+  } catch (err) {
+    next(err);
+  }
+};
 
 const ProfileDoctor = async (req, res, next) => {
 
@@ -159,5 +200,9 @@ const ProfileDoctor = async (req, res, next) => {
 module.exports = {
     clientSignup,
     GetServices,
+<<<<<<< HEAD
     ProfileDoctor
+=======
+    ProfileDoctor,
+>>>>>>> 98c6fb10fd804a92fcb1a1e99993d8ccf6c15099
 };

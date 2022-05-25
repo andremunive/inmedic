@@ -8,6 +8,7 @@ const ConsultSchema = Schema({
         ref: 'doctor',
         required: true
     },
+<<<<<<< HEAD
     perfil: {
         type: mongoose.Schema.Types.String,
         ref: 'doctor',
@@ -18,6 +19,8 @@ const ConsultSchema = Schema({
         ref: 'doctor',
         required: true
     },
+=======
+>>>>>>> 98c6fb10fd804a92fcb1a1e99993d8ccf6c15099
     description: {
         type: String,
         required: true
@@ -26,11 +29,14 @@ const ConsultSchema = Schema({
         type: String,
         required: true
     },
+<<<<<<< HEAD
     specialization: {
         type: mongoose.Schema.Types.String,
         ref: 'doctor',
         required: true
     },
+=======
+>>>>>>> 98c6fb10fd804a92fcb1a1e99993d8ccf6c15099
     services: {
         type: mongoose.Schema.Types.Array,
         ref: 'doctor',

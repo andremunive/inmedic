@@ -74,7 +74,7 @@ const login = async (req, res, next) => {
         const accessToken = generateAccessToken(user._id, user.role);
       
       
-        res.json(new AuthSerializer(accessToken,user.role));
+        res.json(new AuthSerializer(accessToken,user.role,user._id));
 
     } catch (err) {
         next(err);

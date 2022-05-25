@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("./src/config/database").connect();
 const express = require("express");
+const http = require("http");
 const ErrorSerializer = require('./src/Serializers/BaseSerializer');
 const clientRoutes = require('./src/components/client/ClientRoute');
 const doctorRoutes = require('./src/components/doctor/DoctorRoute');
@@ -8,6 +9,9 @@ const userRoutes = require('./src/components/user/UserRoute');
 //const consultRoutes = require('./src/components/consulta/consultRoute');
 
 const app = express();
+
+app.set('port', process.env.PORT || 3001);
+const server = http.createServer(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -80,5 +84,8 @@ app.use((req, res, next) => {
     //   console.log(error)
     // })
    
+    app.listen(process.env.PORT, () => {
+      console.log(`Server on port ${app.get('port')}`);
+  });
 
 module.exports = app;
