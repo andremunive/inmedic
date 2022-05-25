@@ -80,6 +80,15 @@ const clientSignup = async (req, res, next) => {
      console.log("search: ", body.search);
      console.log("city: ", body.city);
 
+     const userPayload = {
+       search: body.search,
+       city: body.city
+    };
+
+     if (Object.values(userPayload).every((val) => val === "")) {
+      throw new ApiError('Fields not complete', 400);
+    }
+
       const doctorBySpecialization = await Doctor.find({specialization:{$regex: body.search.trim(), $options: "$i"}, 
       city: {$regex: body.city.trim(), $options: "i"}});
 
@@ -91,8 +100,11 @@ const clientSignup = async (req, res, next) => {
       
         let doctor = [];
         doctor = doctorByServices.length ? doctorByServices : doctor;
+        console.log("Services: ", doctor);
         doctor = doctorByName.length ? doctorByName : doctor;
+        console.log("Name: ", doctor);
         doctor = doctorBySpecialization.length ? doctorBySpecialization : doctor;
+        console.log("Specialization: ", doctor);
 
         let resultConsults = [];
         let myIndex = 0;
@@ -101,23 +113,18 @@ const clientSignup = async (req, res, next) => {
           await consultModel.find({name: doc.name}).then((profileSearch)=> {
             resultConsults= [...resultConsults,...profileSearch];
             myIndex += 1;
-            console.log("#######******",resultConsults);
+            console.log("profileDoctor",resultConsults);
             
             if (myIndex === doctor.length) {
 
               if (resultConsults.length === 0 ) {
-                res.send({status: "user not found", data: null});
+                res.json({status: "user not found", data: null});
               } else {
               res.json(new ConsultSerializer(resultConsults));
               }
             }
           })
         })  
-
-
-      
-
-  
     } catch (err) {
       next(err);
     }

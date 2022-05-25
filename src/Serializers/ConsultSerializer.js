@@ -11,6 +11,7 @@ class ConsultSerializer extends BaseSerializer {
       delete serializedModel?.services;
       delete serializedModel?.tipoConsulta;
       delete serializedModel?.precio;
+      delete serializedModel?.specialization;
       
       return serializedModel;
     });

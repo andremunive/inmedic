@@ -1,9 +1,10 @@
 const Doctor = require('./DoctorModel');
 const bcrypt = require("bcryptjs");
 const ConsultSchema= require('./ConsultModel');
-//const { generateAccessToken } = require('../../helpers/jwt');
+const cloudinary = require('../../config/storeimages');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
 const ApiError = require('../../utils/ApiError');
+
 
 const doctorSignUp = async (req, res,next) => {
 
@@ -82,7 +83,15 @@ const Addconsult = async (req, res,next) => {
         services: doctor.services,
         tipoConsulta: body.tipoConsulta,
         precio: body.precio,
-    })
+    });
+
+    const image = await cloudinary.v2.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
+    { public_id: "olympic_flag" });
+
+    console.log(image);
+     
+
+    
   
     consult = await consult.save();
   
