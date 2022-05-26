@@ -164,28 +164,34 @@ const ProfileDoctor = async(req, res, next) => {
 };
 
 const ReviewDoctor = async(req, res, next) => {
-    const { body } = req;
 
-    req.isRole('user');
+    try {
+        const { body } = req;
 
-    const userId = req.user;
-    const user = await Client.findById({ _id: userId.id });
-    console.log("userID: ", user);
+        req.isRole('user');
 
-    let review = new ReviewSchema({
-        name: user.name,
-        idDoctor: req.params._id,
-        comment: body.comment,
-    });
+        const userId = req.user;
+        const user = await Client.findById({ _id: userId.id });
+        console.log("userID: ", user);
 
-    review = review.save();
-    console.log("REVIEW: ", review);
+        let review = new ReviewSchema({
+            name: user.name,
+            idDoctor: req.params._id,
+            comment: body.comment,
+        });
 
-    if (!review) {
-        throw new ApiError("Review cannot be created", 400);
+        review = await review.save();
+        console.log("REVIEW: ", review);
+
+        if (!review) {
+            throw new ApiError("Review cannot be created", 400);
+        }
+
+        res.status(200).json(review);
+    } catch (err) {
+        next(err);
     }
 
-    res.status(200).json(review);
 
 };
 
