@@ -3,7 +3,8 @@ const Doctor = require('../doctor/DoctorModel');
 const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
-const DoctorsSerializer = require('../../Serializers/DoctorsSerializer');
+//const DoctorsSerializer = require('../../Serializers/DoctorsSerializer');
+const ReviewSchema = require('./ReviewModel');
 const ConsultModel = require('../doctor/ConsultModel');
 
 const consultModel = require('../doctor/ConsultModel');
@@ -162,10 +163,35 @@ const ProfileDoctor = async(req, res, next) => {
     }
 };
 
+const ReviewDoctor = async(req, res, next) => {
+    const { body } = req;
 
+    req.isRole('user');
+
+    const userId = req.user;
+    const user = await Client.findById({ _id: userId.id });
+    console.log("userID: ", user);
+
+    let review = new ReviewSchema({
+        name: user.name,
+        idDoctor: req.params._id,
+        comment: body.comment,
+    });
+
+    review = review.save();
+    console.log("REVIEW: ", review);
+
+    if (!review) {
+        throw new ApiError("Review cannot be created", 400);
+    }
+
+    res.status(200).json(review);
+
+};
 
 module.exports = {
     clientSignup,
     GetServices,
-    ProfileDoctor
+    ProfileDoctor,
+    ReviewDoctor
 };
