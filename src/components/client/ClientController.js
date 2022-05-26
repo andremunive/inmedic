@@ -162,6 +162,28 @@ const ProfileDoctor = async(req, res, next) => {
     }
 };
 
+const AgendarCita = async (req, res, next) => {
+  try {
+    const { body } = req;
+    const userId = req.user;
+    if (body.name === undefined) {
+      throw new ApiError('error', 400);
+    }
+    const user = await Client.findOne({ _id:  userId });
+    if (!user) {
+      throw new ApiError('User not found', 404);
+    }
+    const emailUser = user.email;
+
+    //await user.update({ token: user.token });
+    await enviarCorreoRecuperacion(emailUser, user._id);
+
+    res.json({ status: 'success', data: null });
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 
 module.exports = {
