@@ -11,7 +11,8 @@ class DoctorsSerializer extends BaseSerializer {
       delete serializedModel?.birthDate;
       delete serializedModel?.documentNumber;
       delete serializedModel?.gender;
-      serializedModel?.lastLoginDate;
+      delete serializedModel?.lastLoginDate;
+      delete serializedModel?.professionalCard;
       
       return serializedModel;
     });
