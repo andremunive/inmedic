@@ -7,31 +7,35 @@ const ScheduleSchema = Schema({
         required: false
     },
     DocumentNumber: {
-        tyme: String,
+        type: String,
         required: false
     },
     birthDate: {
         type: String,
         required: false
     },
-    fecha: {
+    date: {
         type: String,
         default: false
     },
-    hora: {
+    hour: {
         type: String,
         default: false
     },
-    Observation: {
-        tyme: String,
+    email: {
+        type: String,
+        default: false
+    },
+    observation: {
+        type: String,
         required: false
     },
     services: {
-        tyme: String,
+        type: String,
         required: false
     },
-    tipoConsulta: {
-        tyme: String,
+    tipoConsult: {
+        type: String,
         required: false
     },
     status: {

@@ -8,6 +8,7 @@ const ReviewSchema = require('./ReviewModel');
 const ConsultModel = require('../doctor/ConsultModel');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
 const Schedule = require('./ScheduleNotUserModel');
+const Schedule2 = require('./ScheduleModel');
 
 const clientSignup = async(req, res, next) => {
     try {
@@ -164,41 +165,64 @@ const ProfileDoctor = async(req, res, next) => {
 
 const AgendarCita = async (req, res, next) => {
   try {
-    //const { body } = req;
+    const { body } = req;
     const userId = req.user;
     console.log("UseID: ", userId);
+    const user = await Client.findOne({ _id:  userId.id });
+    
 
     const userPayload = {
         name: body.name,
         DocumentNumber: body.DocumentNumber,
         birthDate: body.birthDate,
-        date: body.fecha,
+        date: body.date,
         hour: body.hour,
+        email: body.email,
         observation: body.observation,
         services: body.services,
         tipoConsult: body.tipoConsult,
-        status
+        status: body.status
     }
 
-    if (Object.values(userPayload).every((val) => val === "")) {
-        throw new ApiError('Fields not complete', 400);
-    }
-    // if (body.name === undefined) {
-    //   throw new ApiError('error', 400);
-    // }
-    const user = await Client.findOne({ _id:  userId.id });
+    if (Object.values(userPayload).some((val) => val === undefined)) {
 
+        await enviarCorreoRecuperacion(userPayload.email, user._id);
+        console.log("ENTRO FORMULARIO")
+        await enviarCorreoRecuperacion(user.email, user._id);
+
+        const schedule = await Schedule.create(userPayload);
+        Object.assign(schedule, { status: true });
+
+        await schedule.save();
+
+       
+
+        res.status(200).json({ status: 'success1', data: null });
+
+    } else {
+        console.log("ENTRO SIN FORMULARIO");
+
+        await enviarCorreoRecuperacion(user.email, user._id);
+
+        const userPayload2 = {
+            idUser: user._id,
+            name: user.name+" "+user.lastName,
+            email: user.email,
+            edad: user.birthDate
+        }
+
+        await Schedule2.create(userPayload2);
+
+        
+
+        res.status(200).json({ status: 'success2', data: null });
+
+    }
 
     
-    if (!user) {
-      throw new ApiError('User not found', 404);
-    }
-    const emailUser = user.email;
+    
 
-    //await user.update({ token: user.token });
-    await enviarCorreoRecuperacion(emailUser, user._id);
-
-    res.json({ status: 'success', data: null });
+    
   } catch (err) {
     next(err);
   }
