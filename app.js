@@ -6,6 +6,7 @@ const ErrorSerializer = require('./src/Serializers/BaseSerializer');
 const clientRoutes = require('./src/components/client/ClientRoute');
 const doctorRoutes = require('./src/components/doctor/DoctorRoute');
 const userRoutes = require('./src/components/user/UserRoute');
+const appointmentRoutes =require('./src/components/appointments/appointmentRoute');
 //const consultRoutes = require('./src/components/consulta/consultRoute');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use((req,res,next) =>{
 app.use('/client' ,clientRoutes);
 app.use('/doctor', doctorRoutes);
 app.use('/user', userRoutes);
+app.use('/appointment', appointmentRoutes);
 //app.use('/consult', consultRoutes);
 
 

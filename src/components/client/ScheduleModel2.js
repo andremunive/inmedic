@@ -50,6 +50,10 @@ const ScheduleSchema = Schema({
     status: {
         type: String,
         default: "pending",
+    },
+    reason: {
+        type: String,
+        required: false
     }
 });
 
