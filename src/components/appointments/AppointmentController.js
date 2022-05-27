@@ -37,9 +37,11 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
     try {
         const { body } = req;
 
-        req.isRole('user');
+        req.isRole('doctor');
+        
 
         const doctorId = req.params.doctorId;
+        req.isUserAuthorized(doctorId);
 
         console.log("doctor id: "+doctorId)
 

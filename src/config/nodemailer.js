@@ -27,7 +27,7 @@ const enviarCorreoSolicitud = async function enviarMail(email, appoinmentId, doc
     <title></title>
 </head>
 <body style="background-color: #f4f4f4; font-family: Roboto, arial, sans-serif;">
-    <div style=" height: 140px; margin: 0; padding: 0;"> 
+    <div style=" height: 100%; margin: 0; padding: 0;"> 
     </div>
     
     <div style="max-width: 500px; background-color: rgb(249, 249, 249); margin: -80px auto 0 auto;">
