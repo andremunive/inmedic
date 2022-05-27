@@ -47,9 +47,9 @@ app.use((req, res, next) => {
     res.status(statusCode);
     res.json(new ErrorSerializer(message, null));
   });
-   
-    server.listen(process.env.PORT, () => {
-      console.log(`Server on port ${app.get('port')}`);
-  });
+
+  app.listen(process.env.PORT, () => {
+    console.log(`Server on port ${app.get('port')}`);
+});
 
 module.exports = app;
