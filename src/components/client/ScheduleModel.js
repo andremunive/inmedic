@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Schedule2Schema = Schema({
+    idDoctor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'doctor',
+        required: true
+    },
     idUser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'client',

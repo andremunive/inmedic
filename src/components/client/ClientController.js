@@ -169,9 +169,12 @@ const AgendarCita = async (req, res, next) => {
     const userId = req.user;
     console.log("UseID: ", userId);
     const user = await Client.findOne({ _id:  userId.id });
+    const doctor = await Doctor.findOne({ _id:  req.params._id });
+    console.log("DOCTOR: ", doctor);
     
 
     const userPayload = {
+        idDoctor: doctor._id,
         name: body.name,
         DocumentNumber: body.DocumentNumber,
         birthDate: body.birthDate,
@@ -205,6 +208,7 @@ const AgendarCita = async (req, res, next) => {
         await enviarCorreoRecuperacion(user.email, user._id);
 
         const userPayload2 = {
+            idDoctor: doctor._id,
             idUser: user._id,
             name: user.name+" "+user.lastName,
             email: user.email,
