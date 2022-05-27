@@ -191,7 +191,7 @@ const AgendarCita = async (req, res, next) => {
         checkBox: body.checkBox
     }
 
-    if (Object.values(userPayload).some((val) => val === undefined)) {
+    if (userPayload.checkBox ===! false) {
 
         
         console.log("ENTRO FORMULARIO")
@@ -202,9 +202,9 @@ const AgendarCita = async (req, res, next) => {
 
         await schedule.save();
 
-        await enviarCorreoSolicitud(userPayload.email, schedule._id, doctor._id);
+        await enviarCorreoSolicitud(userPayload.email, schedule._id, doctor.name);
 
-        await enviarCorreoSolicitud(user.email, schedule._id, doctor._id);
+        await enviarCorreoSolicitud(user.email, schedule._id, doctor.name);
 
         console.log("CORREO ENVIADO");
 
