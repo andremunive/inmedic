@@ -22,10 +22,10 @@ var ClientSchema = Schema({
         type: String,
         required: true
     },
-    perfil: {
-        type: String,
-        required: true
-    },
+    // perfil: {
+    //     type: String,
+    //     required: true
+    // },
     gender: {
         type: String,
         required: true

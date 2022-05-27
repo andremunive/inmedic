@@ -22,7 +22,7 @@ const enviarCorreoSolicitud = async function enviarMail(email, appoinmentId, doc
           <a href="${doctorName}">${doctorName}</a>
           
           <p>Atentamente, <br>  
-          Trinos-API</p>`, // html body
+          Inmedic</p>`, // html body
   });
 };
 
