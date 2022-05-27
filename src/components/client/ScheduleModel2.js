@@ -46,6 +46,10 @@ const ScheduleSchema = Schema({
     checkBox: {
         type: Boolean,
         default: false,
+    },
+    status: {
+        type: String,
+        default: "pending",
     }
 });
 
