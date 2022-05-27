@@ -16,7 +16,8 @@ const enviarCorreoSolicitud = async function enviarMail(email, appoinmentId, doc
     from: '"Cita" <inmedic066@gmail.com>', // sender address
     to: email, // list of receivers
     subject: 'cita generada', // Subject line
-    html: `<h3>Cita generada exitosamente</h3>
+    html: 
+    `<h3>Cita generada exitosamente</h3>
           <p>cita id "${appoinmentId}"</p>
           <br>
           <a href="${doctorName}">${doctorName}</a>

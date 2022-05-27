@@ -15,7 +15,7 @@ const ScheduleSchema = Schema({
         type: String,
         required: false
     },
-    edad: {
+    age: {
         type: String,
         required: false
     },
