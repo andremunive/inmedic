@@ -274,10 +274,37 @@ const ReviewDoctor = async(req, res, next) => {
 
 };
 
+const getAppointmentsByDoctorId = async(req, res, next) => {
+
+    try {
+        const { body } = req;
+
+        req.isRole('user');
+
+        const doctorId = req.params.doctorId;
+
+        console.log("doctor id: "+doctorId)
+
+        const appointments = await Schedule.find({ idDoctor: doctorId });
+        
+        if (!appointments) {
+            throw new ApiError("Doctor not found", 400);
+        }
+
+        res.status(200).json(appointments);
+        
+    } catch (err) {
+        next(err);
+    }
+
+
+};
+
 module.exports = {
     clientSignup,
     GetServices,
     ProfileDoctor,
     ReviewDoctor,
-    AgendarCita
+    AgendarCita,
+    getAppointmentsByDoctorId
 };
