@@ -291,7 +291,7 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
 
         console.log("doctor id: "+doctorId)
 
-        const appointments = await Schedule.find({ idDoctor: doctorId });
+        const appointments = await Schedule.find({ idDoctor: doctorId, status:'pending' });
         
         if (!appointments) {
             throw new ApiError("Doctor not found", 400);
@@ -302,7 +302,6 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
     } catch (err) {
         next(err);
     }
-
 
 };
 
