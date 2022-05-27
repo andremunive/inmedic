@@ -3,11 +3,9 @@ const Doctor = require('../doctor/DoctorModel');
 const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
-//const DoctorsSerializer = require('../../Serializers/DoctorsSerializer');
+const { enviarCorreoRecuperacion } = require('../../config/nodemailer');
 const ReviewSchema = require('./ReviewModel');
 const ConsultModel = require('../doctor/ConsultModel');
-
-const consultModel = require('../doctor/ConsultModel');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
 
 const clientSignup = async(req, res, next) => {
@@ -122,7 +120,7 @@ const GetServices = async(req, res, next) => {
         }
 
         doctor.forEach(async(doc) => {
-            await consultModel.find({ name: doc.name }).then((profileSearch) => {
+            await ConsultModel.find({ name: doc.name }).then((profileSearch) => {
                 resultConsults = [...resultConsults, ...profileSearch];
                 myIndex += 1;
                 console.log("profileDoctor", resultConsults);
@@ -165,12 +163,14 @@ const ProfileDoctor = async(req, res, next) => {
 
 const AgendarCita = async (req, res, next) => {
   try {
-    const { body } = req;
+    //const { body } = req;
     const userId = req.user;
-    if (body.name === undefined) {
-      throw new ApiError('error', 400);
-    }
-    const user = await Client.findOne({ _id:  userId });
+    console.log("UseID: ", userId);
+    // if (body.name === undefined) {
+    //   throw new ApiError('error', 400);
+    // }
+    const user = await Client.findOne({ _id:  userId.id });
+    
     if (!user) {
       throw new ApiError('User not found', 404);
     }

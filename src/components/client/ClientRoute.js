@@ -13,4 +13,6 @@ api.get('/profile/:idDoctor', authMiddleware, ClientController.ProfileDoctor);
 
 api.post('/review/:_id', authMiddleware, ClientController.ReviewDoctor);
 
+api.post('/cita', authMiddleware, ClientController.AgendarCita);
+
 module.exports = api;

@@ -6,7 +6,7 @@ class ConsultSerializer extends BaseSerializer {
       const serializedModel = model.toJSON();
 
       delete serializedModel?._id;
-      delete serializedModel?.idDoctor;
+      //delete serializedModel?.idDoctor;
       delete serializedModel?.description2;
       delete serializedModel?.services;
       delete serializedModel?.tipoConsulta;
