@@ -7,6 +7,7 @@ const { enviarCorreoRecuperacion } = require('../../config/nodemailer');
 const ReviewSchema = require('./ReviewModel');
 const ConsultModel = require('../doctor/ConsultModel');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
+const Schedule = require('./ScheduleNotUserModel');
 
 const clientSignup = async(req, res, next) => {
     try {
@@ -115,7 +116,7 @@ const GetServices = async(req, res, next) => {
 
         if (doctor.length === 0) {
 
-            throw new ApiError("Datos inválidos", 500);
+            res.status(200).json({status: "User not found", data: null});
 
         }
 
@@ -166,10 +167,28 @@ const AgendarCita = async (req, res, next) => {
     //const { body } = req;
     const userId = req.user;
     console.log("UseID: ", userId);
+
+    const userPayload = {
+        name: body.name,
+        DocumentNumber: body.DocumentNumber,
+        birthDate: body.birthDate,
+        date: body.fecha,
+        hour: body.hour,
+        observation: body.observation,
+        services: body.services,
+        tipoConsult: body.tipoConsult,
+        status
+    }
+
+    if (Object.values(userPayload).every((val) => val === "")) {
+        throw new ApiError('Fields not complete', 400);
+    }
     // if (body.name === undefined) {
     //   throw new ApiError('error', 400);
     // }
     const user = await Client.findOne({ _id:  userId.id });
+
+
     
     if (!user) {
       throw new ApiError('User not found', 404);
