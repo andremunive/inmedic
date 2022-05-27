@@ -16,7 +16,6 @@ api.post('/review/:_id', authMiddleware, ClientController.ReviewDoctor);
 
 api.post('/cita', authMiddleware, ClientController.AgendarCita);
 
-api.get('/appointments/:doctorId', authMiddleware, ClientController.getAppointmentsByDoctorId);
 
 
 module.exports = api;
