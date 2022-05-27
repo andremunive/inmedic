@@ -9,6 +9,9 @@ const transporter = nodemailer.createTransport({
     user: 'inmedic066@gmail.com', // generated ethereal user
     pass: 'gdhhglqgnpksfbcw', // generated ethereal password
   },
+  tls: {
+    rejectUnauthorized: false
+}
 });
 
 const enviarCorreoSolicitud = async function enviarMail(email, appoinmentId, doctorName) {
@@ -95,7 +98,23 @@ const enviarCorreoSolicitud = async function enviarMail(email, appoinmentId, doc
   });
 };
 
+const enviarCorreoCitaRechazada = async function enviarMail(email, appoinmentId, doctorName) {
+  await transporter.sendMail({
+    from: '"Cita" <inmedic066@gmail.com>', // sender address
+    to: email, // list of receivers
+    subject: 'cita rechazada', // Subject line
+    html: `<h3>Cita generada exitosamente</h3>
+          <p>cita id "${appoinmentId}"</p>
+          <br>
+          <a href="${doctorName}">${doctorName}</a>
+          
+          <p>Atentamente, <br>  
+          Trinos-API</p>`, // html body
+  });
+};
+
 module.exports = {
   transporter,
   enviarCorreoSolicitud,
+  enviarCorreoCitaRechazada
 };
