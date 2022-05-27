@@ -11,15 +11,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const enviarCorreoRecuperacion = async function enviarMail(email, user) {
+const enviarCorreoSolicitud = async function enviarMail(email, appoinmentId, doctorName) {
   await transporter.sendMail({
     from: '"Cita" <inmedic066@gmail.com>', // sender address
     to: email, // list of receivers
-    subject: 'Su solicitud de cita ha sido realizada', // Subject line
-    html: `<h3>Hola 'Nombre de titular de la cita'</h3>
-          <p></p>
+    subject: 'cita generada', // Subject line
+    html: `<h3>Cita generada exitosamente</h3>
+          <p>cita id "${appoinmentId}"</p>
           <br>
-          <a href="${user}">${user}</a>
+          <a href="${doctorName}">${doctorName}</a>
           
           <p>Atentamente, <br>  
           Trinos-API</p>`, // html body
@@ -28,5 +28,5 @@ const enviarCorreoRecuperacion = async function enviarMail(email, user) {
 
 module.exports = {
   transporter,
-  enviarCorreoRecuperacion,
+  enviarCorreoSolicitud,
 };
