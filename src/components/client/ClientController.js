@@ -7,8 +7,8 @@ const { enviarCorreoRecuperacion } = require('../../config/nodemailer');
 const ReviewSchema = require('./ReviewModel');
 const ConsultModel = require('../doctor/ConsultModel');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
-const Schedule = require('./ScheduleNotUserModel');
-const Schedule2 = require('./ScheduleModel');
+const Schedule = require('./ScheduleModel2');
+//const Schedule2 = require('./ScheduleModel');
 
 const clientSignup = async(req, res, next) => {
     try {
@@ -150,13 +150,16 @@ const ProfileDoctor = async(req, res, next) => {
 
         const profileDoctor = await ConsultModel.find({ idDoctor: params.idDoctor });
         console.log("Profile doctor: ", profileDoctor);
-
+        //console.log("_id: ", profileDoctor);
 
         if (!profileDoctor) return new ApiError("Profile doctor not found", 400);
 
+        const review = await ReviewSchema.find({idDoctor: params.idDoctor }, {_id:0, idDoctor: 0});
+        console.log("Review: ",review);
 
 
-        res.status(200).json(profileDoctor);
+
+        res.status(200).json({profileDoctor});
 
     } catch (err) {
         next(err);
@@ -164,12 +167,13 @@ const ProfileDoctor = async(req, res, next) => {
 };
 
 const AgendarCita = async (req, res, next) => {
+
   try {
     const { body } = req;
     const userId = req.user;
     console.log("UseID: ", userId);
     const user = await Client.findOne({ _id:  userId.id });
-    const doctor = await Doctor.findOne({ _id:  req.params._id });
+    const doctor = await Doctor.findOne({ _id:  body.idDoctor });
     console.log("DOCTOR: ", doctor);
     
 
@@ -177,14 +181,14 @@ const AgendarCita = async (req, res, next) => {
         idDoctor: doctor._id,
         name: body.name,
         DocumentNumber: body.DocumentNumber,
-        birthDate: body.birthDate,
+        edad: body.birthDate,
         date: body.date,
         hour: body.hour,
         email: body.email,
         observation: body.observation,
         services: body.services,
         tipoConsult: body.tipoConsult,
-        status: body.status
+        checkBox: body.checkBox
     }
 
     if (Object.values(userPayload).some((val) => val === undefined)) {
@@ -194,11 +198,10 @@ const AgendarCita = async (req, res, next) => {
         await enviarCorreoRecuperacion(user.email, user._id);
 
         const schedule = await Schedule.create(userPayload);
-        Object.assign(schedule, { status: true });
+        Object.assign(schedule, { checkBox: true });
 
         await schedule.save();
 
-       
 
         res.status(200).json({ status: 'success1', data: null });
 
@@ -209,13 +212,20 @@ const AgendarCita = async (req, res, next) => {
 
         const userPayload2 = {
             idDoctor: doctor._id,
-            idUser: user._id,
+            //idUser: user._id,
             name: user.name+" "+user.lastName,
             email: user.email,
-            edad: user.birthDate
+            edad: user.birthDate,
+            date: body.date,
+            hour: body.hour,
+            email: user.email,
+            observation: body.observation,
+            services: body.services,
+            tipoConsult: body.tipoConsult,
+            checkBox: body.checkBox
         }
 
-        await Schedule2.create(userPayload2);
+        await Schedule.create(userPayload2);
 
         
 

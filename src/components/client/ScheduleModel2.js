@@ -15,7 +15,7 @@ const ScheduleSchema = Schema({
         type: String,
         required: false
     },
-    birthDate: {
+    edad: {
         type: String,
         required: false
     },
@@ -43,7 +43,7 @@ const ScheduleSchema = Schema({
         type: String,
         required: false
     },
-    status: {
+    checkBox: {
         type: Boolean,
         default: false,
     }
