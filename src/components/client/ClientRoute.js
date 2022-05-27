@@ -9,10 +9,14 @@ const api = express.Router();
 api.post('/signup', ClientController.clientSignup);
 // Get service
 api.post('/services', authMiddleware, paginationMiddleware, ClientController.GetServices);
+
 api.get('/profile/:idDoctor', authMiddleware, ClientController.ProfileDoctor);
 
 api.post('/review/:_id', authMiddleware, ClientController.ReviewDoctor);
 
-api.post('/cita/:_id', authMiddleware, ClientController.AgendarCita);
+api.post('/cita', authMiddleware, ClientController.AgendarCita);
+
+api.get('/appointments/:doctorId', authMiddleware, ClientController.getAppointmentsByDoctorId);
+
 
 module.exports = api;

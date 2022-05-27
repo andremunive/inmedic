@@ -32,7 +32,6 @@ var DoctorSchema = Schema({
     },
     perfil: {
         type: String,
-        default: 'perfil.png',
         required: true
     },
     gender: {

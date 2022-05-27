@@ -3,12 +3,12 @@ const Doctor = require('../doctor/DoctorModel');
 const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
-const { enviarCorreoRecuperacion } = require('../../config/nodemailer');
+const { enviarCorreoSolicitud } = require('../../config/nodemailer');
 const ReviewSchema = require('./ReviewModel');
 const ConsultModel = require('../doctor/ConsultModel');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
-const Schedule = require('./ScheduleNotUserModel');
-const Schedule2 = require('./ScheduleModel');
+const Schedule = require('./ScheduleModel2');
+//const Schedule2 = require('./ScheduleModel');
 
 const clientSignup = async(req, res, next) => {
     try {
@@ -150,13 +150,16 @@ const ProfileDoctor = async(req, res, next) => {
 
         const profileDoctor = await ConsultModel.find({ idDoctor: params.idDoctor });
         console.log("Profile doctor: ", profileDoctor);
-
+        //console.log("_id: ", profileDoctor);
 
         if (!profileDoctor) return new ApiError("Profile doctor not found", 400);
 
+        const review = await ReviewSchema.find({idDoctor: params.idDoctor }, {_id:0, idDoctor: 0});
+        console.log("Review: ",review);
 
 
-        res.status(200).json(profileDoctor);
+
+        res.status(200).json({profileDoctor});
 
     } catch (err) {
         next(err);
@@ -164,12 +167,13 @@ const ProfileDoctor = async(req, res, next) => {
 };
 
 const AgendarCita = async (req, res, next) => {
+
   try {
     const { body } = req;
     const userId = req.user;
     console.log("UseID: ", userId);
     const user = await Client.findOne({ _id:  userId.id });
-    const doctor = await Doctor.findOne({ _id:  req.params._id });
+    const doctor = await Doctor.findOne({ _id:  body.idDoctor });
     console.log("DOCTOR: ", doctor);
     
 
@@ -177,47 +181,59 @@ const AgendarCita = async (req, res, next) => {
         idDoctor: doctor._id,
         name: body.name,
         DocumentNumber: body.DocumentNumber,
-        birthDate: body.birthDate,
+        edad: body.birthDate,
         date: body.date,
         hour: body.hour,
         email: body.email,
         observation: body.observation,
         services: body.services,
         tipoConsult: body.tipoConsult,
-        status: body.status
+        checkBox: body.checkBox
     }
 
-    if (Object.values(userPayload).some((val) => val === undefined)) {
+    if (userPayload.checkBox ===! false) {
 
-        await enviarCorreoRecuperacion(userPayload.email, user._id);
+        
         console.log("ENTRO FORMULARIO")
-        await enviarCorreoRecuperacion(user.email, user._id);
+        
 
         const schedule = await Schedule.create(userPayload);
-        Object.assign(schedule, { status: true });
+        Object.assign(schedule, { checkBox: true });
 
         await schedule.save();
 
-       
+        await enviarCorreoSolicitud(userPayload.email, schedule._id, doctor.name);
+
+        await enviarCorreoSolicitud(user.email, schedule._id, doctor.name);
+
+        console.log("CORREO ENVIADO");
+
 
         res.status(200).json({ status: 'success1', data: null });
 
     } else {
+
         console.log("ENTRO SIN FORMULARIO");
 
-        await enviarCorreoRecuperacion(user.email, user._id);
-
+    
         const userPayload2 = {
             idDoctor: doctor._id,
-            idUser: user._id,
+            //idUser: user._id,
             name: user.name+" "+user.lastName,
             email: user.email,
-            edad: user.birthDate
+            edad: user.birthDate,
+            date: body.date,
+            hour: body.hour,
+            email: user.email,
+            observation: body.observation,
+            services: body.services,
+            tipoConsult: body.tipoConsult,
+            checkBox: body.checkBox
         }
 
-        await Schedule2.create(userPayload2);
+        const schedule = await Schedule.create(userPayload2);
 
-        
+        await enviarCorreoSolicitud(user.email, schedule._id, doctor.name);
 
         res.status(200).json({ status: 'success2', data: null });
 
@@ -264,10 +280,36 @@ const ReviewDoctor = async(req, res, next) => {
 
 };
 
+const getAppointmentsByDoctorId = async(req, res, next) => {
+
+    try {
+        const { body } = req;
+
+        req.isRole('user');
+
+        const doctorId = req.params.doctorId;
+
+        console.log("doctor id: "+doctorId)
+
+        const appointments = await Schedule.find({ idDoctor: doctorId, status:'pending' });
+        
+        if (!appointments) {
+            throw new ApiError("Doctor not found", 400);
+        }
+
+        res.status(200).json(appointments);
+        
+    } catch (err) {
+        next(err);
+    }
+
+};
+
 module.exports = {
     clientSignup,
     GetServices,
     ProfileDoctor,
     ReviewDoctor,
-    AgendarCita
+    AgendarCita,
+    getAppointmentsByDoctorId
 };
