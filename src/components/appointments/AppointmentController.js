@@ -17,8 +17,8 @@ const reject = async(req, res, next) => {
 
       if(appointment){
           try{
-            const doctor =  await Doctor.findOne({ _id:  appointment.idDoctor });
-            await email.enviarCorreoCitaRechazada(appointment.email,appointment.id,doctor.name)
+            //const doctor =  await Doctor.findOne({ _id:  appointment.idDoctor });
+            await email.enviarCorreoCitaRechazada(appointment.email,appointment.id,req.body.reason)
           }catch(err){
             throw new ApiError(err, 400);
           }
@@ -36,8 +36,6 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
 
     try {
         const { body } = req;
-
-        req.isRole('user');
 
         const doctorId = req.params.doctorId;
 
