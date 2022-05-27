@@ -3,7 +3,7 @@ const Doctor = require('../doctor/DoctorModel');
 const bcrypt = require("bcryptjs");
 const ApiError = require('../../utils/ApiError');
 const UserSerializer = require('../../Serializers/UserSerializer');
-const { enviarCorreoRecuperacion } = require('../../config/nodemailer');
+const { enviarCorreoSolicitud } = require('../../config/nodemailer');
 const ReviewSchema = require('./ReviewModel');
 const ConsultModel = require('../doctor/ConsultModel');
 const ConsultSerializer = require('../../Serializers/ConsultSerializer');
@@ -191,25 +191,31 @@ const AgendarCita = async (req, res, next) => {
         checkBox: body.checkBox
     }
 
-    if (Object.values(userPayload).some((val) => val === undefined)) {
+    if (userPayload.checkBox ===! false) {
 
-        await enviarCorreoRecuperacion(userPayload.email, user._id);
+        
         console.log("ENTRO FORMULARIO")
-        await enviarCorreoRecuperacion(user.email, user._id);
+        
 
         const schedule = await Schedule.create(userPayload);
         Object.assign(schedule, { checkBox: true });
 
         await schedule.save();
 
+        await enviarCorreoSolicitud(userPayload.email, schedule._id, doctor.name);
+
+        await enviarCorreoSolicitud(user.email, schedule._id, doctor.name);
+
+        console.log("CORREO ENVIADO");
+
 
         res.status(200).json({ status: 'success1', data: null });
 
     } else {
+
         console.log("ENTRO SIN FORMULARIO");
 
-        await enviarCorreoRecuperacion(user.email, user._id);
-
+    
         const userPayload2 = {
             idDoctor: doctor._id,
             //idUser: user._id,
@@ -225,9 +231,9 @@ const AgendarCita = async (req, res, next) => {
             checkBox: body.checkBox
         }
 
-        await Schedule.create(userPayload2);
+        const schedule = await Schedule.create(userPayload2);
 
-        
+        await enviarCorreoSolicitud(user.email, schedule._id, doctor.name);
 
         res.status(200).json({ status: 'success2', data: null });
 
