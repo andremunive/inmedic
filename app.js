@@ -6,7 +6,7 @@ const ErrorSerializer = require('./src/Serializers/BaseSerializer');
 const clientRoutes = require('./src/components/client/ClientRoute');
 const doctorRoutes = require('./src/components/doctor/DoctorRoute');
 const userRoutes = require('./src/components/user/UserRoute');
-const appointmentRoutes =require('./src/components/appointments/appointmentRoute');
+const appointmentRoutes =require('./src/components/appointments/AppointmentRoute');
 //const consultRoutes = require('./src/components/consulta/consultRoute');
 
 const app = express();

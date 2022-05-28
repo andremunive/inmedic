@@ -8,6 +8,8 @@ const api = express.Router();
 //Create new client
 api.post('/reject', authMiddleware, AppointmentController.reject);
 
+api.post('/approve', authMiddleware, AppointmentController.approve);
+
 api.get('/getByDoctor/:doctorId', authMiddleware, AppointmentController.getAppointmentsByDoctorId);
 
 module.exports = api;
