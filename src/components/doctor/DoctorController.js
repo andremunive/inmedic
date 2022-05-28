@@ -10,7 +10,7 @@ const doctorSignUp = async(req, res, next) => {
 
     try {
 
-        const input = { name, lastName, documentNumber, professionalCard, phoneNumber, address, city, gender,
+        const input = { name, lastName, documentNumber, professionalCard, phoneNumber, address, city, perfil, gender,
              email, password, birthDate, specialization, services} = req.body;
         let inputArray = Object.keys(input);
 
@@ -41,8 +41,8 @@ const doctorSignUp = async(req, res, next) => {
             console.log("Encripting Error", error)
         });
 
-        const image = await cloudinary.v2.uploader.upload(req.file.path);
-        console.log(image);
+        //const image = await cloudinary.v2.uploader.upload(perfil);
+        //console.log(image);
 
         let _doctor;
         await Doctor.create({
@@ -53,7 +53,7 @@ const doctorSignUp = async(req, res, next) => {
             phoneNumber,
             address,
             city,
-            perfil: image.url,
+            perfil,
             gender,
             email,
             password: encryptedPassword,
