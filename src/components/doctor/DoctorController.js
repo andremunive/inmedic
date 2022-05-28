@@ -73,6 +73,12 @@ const Addconsult = async(req, res, next) => {
 
         if (!doctor) throw new ApiError("User not found", 400);
 
+        const oldDoctor = await ConsultSchema.findOne({ idDoctor: params._id });
+
+        if (oldDoctor != null) {
+            throw new ApiError(" Profile Already Exist.", 400);
+        }
+
 
         //const image = await cloudinary.v2.uploader.upload(body.perfil);
 
