@@ -10,13 +10,6 @@ const doctorSignUp = async(req, res, next) => {
 
     try {
 
-        // var data = req.body;
-        // console.log('DATA => ', req.body)
-
-        // if (!data) {
-        //     throw new ApiError("All input is required", 400);
-        // }
-
         const input = { name, lastName, documentNumber, professionalCard, phoneNumber, address, city, gender,
              email, password, birthDate, specialization, services} = req.body;
         let inputArray = Object.keys(input);
@@ -43,7 +36,7 @@ const doctorSignUp = async(req, res, next) => {
         let encryptedPassword;
         await bcrypt.hash(data.password, 10).then((resul) => {
             encryptedPassword = resul
-            data.password = encryptedPassword
+            password = encryptedPassword
         }).catch((error) => {
             console.log("Encripting Error", error)
         });
