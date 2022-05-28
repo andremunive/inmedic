@@ -41,7 +41,7 @@ const doctorSignUp = async(req, res, next) => {
             console.log("Encripting Error", error)
         });
 
-        const image = await cloudinary.v2.uploader.upload(req.file.perfil);
+        const image = await cloudinary.v2.uploader.upload(req.file.path);
         console.log(image);
 
         let _doctor;
