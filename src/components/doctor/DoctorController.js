@@ -73,13 +73,16 @@ const Addconsult = async(req, res, next) => {
 
         if (!doctor) throw new ApiError("User not found", 400);
 
-        const image = await cloudinary.v2.uploader.upload(body.perfil);
 
-        console.log(image);
+        console.log("URL: ",doctor.perfil);
+        //const image = await cloudinary.v2.uploader.upload(req.file.perfil);
+        //const image = await cloudinary.v2.uploader.upload(body.perfil);
+
+        //console.log(image);
 
         let consult = new ConsultSchema({
             idDoctor: doctor._id,
-            perfil: image.url,
+            perfil: doctor.perfil,
             name: doctor.name + " " + doctor.lastname,
             description: body.description,
             description2: body.description2,
