@@ -72,7 +72,9 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
 
         const doctorId = req.params.doctorId;
 
-        const appointments = await Schedule.find({ idDoctor: doctorId, status:'pending' });
+        const status = ['pending', 'approved'];
+
+        const appointments = await Schedule.find({ idDoctor: doctorId, status:{$in: status} });
         
         if (!appointments) {
             throw new ApiError("Doctor not found", 400);
@@ -92,7 +94,7 @@ const getAppointmentsByClientId = async(req, res, next) => {
 
         const clientId = req.params.clientId;
 
-        const status = ['approve', 'reject'];
+        const status = ['approved', 'rejected'];
 
         const appointments = await Schedule.find({ idClient: clientId, status:{$in: status} }).populate("idDoctor");
         
@@ -111,7 +113,7 @@ const getAppointmentsByClientId = async(req, res, next) => {
             return r;
          })
 
-        res.status(200).json(response);
+        res.status(200).json(appointments);
         
     } catch (err) {
         next(err);
