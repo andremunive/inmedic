@@ -68,8 +68,40 @@ const enviarCorreoCitaRechazada = async function enviarMail(email, appoinmentId,
   });
 };
 
+const enviarCorreoCitaAprobada = async function enviarMail(email, appoinment, tipoLugar, lugar) {
+
+  transporter.use('compile', hbs({
+    viewEngine: {
+      extName: '.handlebars',
+      partialsDir: path.join(__dirname, "templates"),//your path, views is a folder inside the source folder
+      layoutsDir: path.join(__dirname, "templates"),
+      defaultLayout: ''//set this one empty and provide your template below,
+    },
+    viewPath: path.join(__dirname, "templates"),
+    extName: '.handlebars',
+   }));
+
+  await transporter.sendMail({
+    from: '"Cita" <inmedic066@gmail.com>', // sender address
+    to: email, // list of receivers
+    subject: 'Cita aprobada', // Subject line
+    template:'aprobada',
+    context: {
+      citaID: appoinment._id,
+      cita_fecha: appoinment.date,
+      cita_hora:appoinment.hour,
+      cita_modalidad:appoinment.tipoConsult,
+      reunion:tipoLugar,
+      lugar:lugar
+    }  // html body
+  });
+
+};
+
+
 module.exports = {
   transporter,
   enviarCorreoSolicitud,
-  enviarCorreoCitaRechazada
+  enviarCorreoCitaRechazada,
+  enviarCorreoCitaAprobada
 };
