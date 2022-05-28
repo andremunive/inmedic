@@ -170,8 +170,11 @@ const AgendarCita = async (req, res, next) => {
 
   try {
     const { body } = req;
+    req.isRole('user');
     const userId = req.user;
     console.log("UseID: ", userId);
+    
+    
     const user = await Client.findOne({ _id:  userId.id });
     const doctor = await Doctor.findOne({ _id:  body.idDoctor });
     console.log("DOCTOR: ", doctor);
@@ -185,7 +188,7 @@ const AgendarCita = async (req, res, next) => {
         idClient: user._id,
         name: body.name,
         DocumentNumber: body.DocumentNumber,
-        age: edadUser,
+        age: body.age,
         date: body.date,
         hour: body.hour,
         email: body.email,
