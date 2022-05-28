@@ -34,7 +34,7 @@ const doctorSignUp = async(req, res, next) => {
 
         // Encrypt user password
         let encryptedPassword;
-        await bcrypt.hash(data.password, 10).then((resul) => {
+        await bcrypt.hash(password, 10).then((resul) => {
             encryptedPassword = resul
             password = encryptedPassword
         }).catch((error) => {
