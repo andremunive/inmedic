@@ -175,13 +175,17 @@ const AgendarCita = async (req, res, next) => {
     const user = await Client.findOne({ _id:  userId.id });
     const doctor = await Doctor.findOne({ _id:  body.idDoctor });
     console.log("DOCTOR: ", doctor);
+
+    edadUser = calcular_edad(body.age);
+    console.log("edad: ",edadUser);
     
 
     const userPayload = {
         idDoctor: doctor._id,
+        idClient: user._id,
         name: body.name,
         DocumentNumber: body.DocumentNumber,
-        age: body.age,
+        age: edadUser,
         date: body.date,
         hour: body.hour,
         email: body.email,
@@ -192,6 +196,11 @@ const AgendarCita = async (req, res, next) => {
     }
 
     if (userPayload.checkBox ===! false) {
+
+        if (Object.values(userPayload).some((val) => val === "")) {
+            throw new ApiError("Complete all fields", 200);
+
+        } 
 
         
         console.log("ENTRO FORMULARIO")
@@ -218,7 +227,7 @@ const AgendarCita = async (req, res, next) => {
     
         const userPayload2 = {
             idDoctor: doctor._id,
-            //idUser: user._id,
+            idClient: user._id,
             name: user.name+" "+user.lastName,
             email: user.email,
             age: user.birthDate,
@@ -279,6 +288,67 @@ const ReviewDoctor = async(req, res, next) => {
 
 
 };
+
+//calcular la edad de una persona
+//recibe la fecha como un string en formato español
+//devuelve un entero con la edad. Devuelve false en caso de que la fecha sea incorrecta o mayor que el dia actual
+function calcular_edad(fecha){
+
+    //calculo la fecha de hoy
+    hoy=new Date()
+
+    console.log("Fecha de hoy: ",hoy);
+    //alert(hoy)
+
+    //calculo la fecha que recibo
+    //La descompongo en un array
+    var array_fecha = fecha.split("/")
+    console.log("Array_fecha: ", array_fecha);
+    //si el array no tiene tres partes, la fecha es incorrecta
+    if (array_fecha.length!=3)
+       return false
+
+    //compruebo que los ano, mes, dia son correctos
+    var ano
+    ano = parseInt(array_fecha[2]);
+    console.log("AÑO: ",ano);
+    if (isNaN(ano))
+       return false
+
+    var mes
+    console.log("MES: ",mes);
+    mes = parseInt(array_fecha[1]);
+    if (isNaN(mes))
+       return false
+
+    var dia
+    console.log("DIA: ",dia);
+    dia = parseInt(array_fecha[0]);
+    if (isNaN(dia))
+       return false
+
+
+    //si el año de la fecha que recibo solo tiene 2 cifras hay que cambiarlo a 4
+    if (ano<=99)
+       ano +=1900
+
+    //resto los años de las dos fechas
+    edad=hoy.getYear()- ano - 1; //-1 porque no se si ha cumplido años ya este año
+    console.log("EDAD: ", edad);
+
+    //si resto los meses y me da menor que 0 entonces no ha cumplido años. Si da mayor si ha cumplido
+    if (hoy.getMonth() + 1 - mes < 0) //+ 1 porque los meses empiezan en 0
+       return edad
+    if (hoy.getMonth() + 1 - mes > 0)
+       return edad+1
+
+    //entonces es que eran iguales. miro los dias
+    //si resto los dias y me da menor que 0 entonces no ha cumplido años. Si da mayor o igual si ha cumplido
+    if (hoy.getUTCDate() - dia >= 0)
+       return edad + 1
+
+    return edad
+}
 
 
 

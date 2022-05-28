@@ -73,7 +73,7 @@ const Addconsult = async(req, res, next) => {
 
         if (!doctor) throw new ApiError("User not found", 400);
 
-        const image = await cloudinary.v2.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg", { public_id: "olympic_flag" });
+        const image = await cloudinary.v2.uploader.upload(body.perfil);
 
         console.log(image);
 
