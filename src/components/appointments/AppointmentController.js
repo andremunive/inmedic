@@ -6,6 +6,8 @@ const email = require('../../config/nodemailer');
 const Doctor = require('../doctor/DoctorModel');
 
 const reject = async(req, res, next) => {
+    console.log("algo aca ")
+    
     try {
       const appointment = await Schedule.findByIdAndUpdate( req.body.id, {
           status:"reject",
@@ -17,12 +19,43 @@ const reject = async(req, res, next) => {
 
       if(appointment){
           try{
-            const doctor =  await Doctor.findOne({ _id:  appointment.idDoctor });
-            await email.enviarCorreoCitaRechazada(appointment.email,appointment.id,doctor.name)
+            //const doctor =  await Doctor.findOne({ _id:  appointment.idDoctor });
+            await email.enviarCorreoCitaRechazada(appointment.email,appointment.id,req.body.reason)
           }catch(err){
             throw new ApiError(err, 400);
           }
           res.json(appointment);
+      }else{
+          throw new ApiError("Not found", 400);
+      }
+
+    } catch (err) {
+      next(err);
+    }
+};
+
+const approve = async(req, res, next) => {
+
+    try {
+      const appointment = await Schedule.findByIdAndUpdate( req.body.id, {
+          status:"approve"
+      },
+      {
+          new:true
+      })
+
+      if(appointment){
+          
+          const doctor =  await Doctor.findOne({ _id:  appointment.idDoctor });
+          
+          if(appointment.tipoConsult == 'virtual'){
+            await email.enviarCorreoCitaAprobada(appointment.email,appointment,"Link",req.body.url);
+          }else{
+            await email.enviarCorreoCitaAprobada(appointment.email,appointment,"Dirección",doctor.address+','+doctor.city);
+          }
+          
+          res.json(appointment);
+
       }else{
           throw new ApiError("Not found", 400);
       }
@@ -62,5 +95,6 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
 
 module.exports = {
     reject,
-    getAppointmentsByDoctorId
+    getAppointmentsByDoctorId,
+    approve
 };
