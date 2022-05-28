@@ -2,7 +2,7 @@ const Doctor = require('./DoctorModel');
 const bcrypt = require("bcryptjs");
 const ConsultSchema = require('./ConsultModel');
 const cloudinary = require('../../config/storeimages');
-const ConsultSerializer = require('../../Serializers/ConsultSerializer');
+//const ConsultSerializer = require('../../Serializers/ConsultSerializer');
 const ApiError = require('../../utils/ApiError');
 
 
@@ -10,16 +10,25 @@ const doctorSignUp = async(req, res, next) => {
 
     try {
 
-        var data = req.body;
-        console.log('DATA => ', req.body)
+        // var data = req.body;
+        // console.log('DATA => ', req.body)
 
-        if (!data) {
+        // if (!data) {
+        //     throw new ApiError("All input is required", 400);
+        // }
+
+        const input = { name, lastName, documentNumber, professionalCard, phoneNumber, address, city, gender,
+             email, password, birthDate, specialization, services} = req.body;
+        let inputArray = Object.keys(input);
+
+        // Validate user input
+        if (inputArray.every((ele) => input[ele] != "" && input[ele] != undefined)) {} else {
             throw new ApiError("All input is required", 400);
         }
 
         // Validamos la existencia del usuario en la base de datos
         let oldUser;
-        await Doctor.findOne({ email: data.email }).then((doctor) => {
+        await Doctor.findOne({ email: email }).then((doctor) => {
 
             oldUser = doctor;
         }).catch((error) => {
@@ -37,16 +46,42 @@ const doctorSignUp = async(req, res, next) => {
             data.password = encryptedPassword
         }).catch((error) => {
             console.log("Encripting Error", error)
-        })
+        });
+
+        const image = await cloudinary.v2.uploader.upload(req.file.perfil);
+        console.log(image);
 
         let _doctor;
-        await Doctor.create(data)
-            .then((doctor) => {
-                _doctor = doctor
-                res.status(200).json(_doctor);
-            }).catch((error) => {
-                console.log(error)
-            });
+        await Doctor.create({
+            name,
+            lastName,
+            documentNumber,
+            professionalCard,
+            phoneNumber,
+            address,
+            city,
+            perfil: image.url,
+            gender,
+            email,
+            password: encryptedPassword,
+            birthDate,
+            specialization,
+            services,
+        }).then((doctor) => {
+            _doctor = doctor
+            res.status(200).json(_doctor);
+        }).catch((error) => {
+            console.log(error)
+        })
+
+        // let _doctor;
+        // await Doctor.create(data)
+        //     .then((doctor) => {
+        //         _doctor = doctor
+        //         res.status(200).json(_doctor);
+        //     }).catch((error) => {
+        //         console.log(error)
+        //     });
 
     } catch (err) {
         next(err);
@@ -74,7 +109,7 @@ const Addconsult = async(req, res, next) => {
         if (!doctor) throw new ApiError("User not found", 400);
 
 
-        console.log("URL: ",doctor.perfil);
+        //console.log("URL: ",doctor.perfil);
         //const image = await cloudinary.v2.uploader.upload(req.file.perfil);
         //const image = await cloudinary.v2.uploader.upload(body.perfil);
 
