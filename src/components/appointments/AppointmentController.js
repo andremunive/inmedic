@@ -100,7 +100,18 @@ const getAppointmentsByClientId = async(req, res, next) => {
             throw new ApiError("Client not found", 400);
         }
 
-        res.status(200).json(appointments);
+        const response = appointments.map(function(a) {
+
+            const r = {
+                doctorName: a.idDoctor.name,
+                idCita: a._id,
+                status:a.status
+            };
+
+            return r;
+         })
+
+        res.status(200).json(response);
         
     } catch (err) {
         next(err);
