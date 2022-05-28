@@ -70,13 +70,7 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
     try {
         const { body } = req;
 
-        req.isRole('doctor');
-        
-
         const doctorId = req.params.doctorId;
-        req.isUserAuthorized(doctorId);
-
-        console.log("doctor id: "+doctorId)
 
         const appointments = await Schedule.find({ idDoctor: doctorId, status:'pending' });
         
@@ -92,9 +86,43 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
 
 };
 
+const getAppointmentsByClientId = async(req, res, next) => {
+
+    try {
+
+        const clientId = req.params.clientId;
+
+        const status = ['approve', 'reject'];
+
+        const appointments = await Schedule.find({ idClient: clientId, status:{$in: status} }).populate("idDoctor");
+        
+        if (!appointments) {
+            throw new ApiError("Client not found", 400);
+        }
+
+        const response = appointments.map(function(a) {
+
+            const r = {
+                doctorName: a.idDoctor.name,
+                idCita: a._id,
+                status:a.status
+            };
+
+            return r;
+         })
+
+        res.status(200).json(response);
+        
+    } catch (err) {
+        next(err);
+    }
+
+};
+
 
 module.exports = {
     reject,
     getAppointmentsByDoctorId,
-    approve
+    approve,
+    getAppointmentsByClientId
 };

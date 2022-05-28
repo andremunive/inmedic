@@ -120,7 +120,7 @@ const GetServices = async(req, res, next) => {
             res.status(200).json({status: "User not found", data: null});
 
         }
-
+        console.log("doctor: "+doctor)
         doctor.forEach(async(doc) => {
             await ConsultModel.find({ idDoctor: doc._id}).then((profileSearch) => {
                 resultConsults = [...resultConsults, ...profileSearch];
