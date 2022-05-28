@@ -10,7 +10,7 @@ const reject = async(req, res, next) => {
     
     try {
       const appointment = await Schedule.findByIdAndUpdate( req.body.id, {
-          status:"reject",
+          status:"rejected",
           reason:req.body.reason
       },
       {
@@ -38,7 +38,7 @@ const approve = async(req, res, next) => {
 
     try {
       const appointment = await Schedule.findByIdAndUpdate( req.body.id, {
-          status:"approve"
+          status:"approved"
       },
       {
           new:true
@@ -113,7 +113,7 @@ const getAppointmentsByClientId = async(req, res, next) => {
             return r;
          })
 
-        res.status(200).json(appointments);
+        res.status(200).json(response);
         
     } catch (err) {
         next(err);
