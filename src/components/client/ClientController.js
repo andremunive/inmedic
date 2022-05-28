@@ -122,10 +122,10 @@ const GetServices = async(req, res, next) => {
         }
 
         doctor.forEach(async(doc) => {
-            await ConsultModel.find({ name: doc.name }).then((profileSearch) => {
+            await ConsultModel.find({ idDoctor: doc._id}).then((profileSearch) => {
                 resultConsults = [...resultConsults, ...profileSearch];
                 myIndex += 1;
-                console.log("profileDoctor", resultConsults);
+                console.log("profileDoctor: ", resultConsults);
 
                 if (myIndex === doctor.length) {
 
