@@ -5,6 +5,7 @@ const ApiError = require('../../utils/ApiError');
 const bcrypt = require("bcryptjs");
 const AuthSerializer = require("../../Serializers/AuthSerializer");
 const UserSerializer = require('../../Serializers/UserSerializer');
+const { restart } = require('nodemon');
 
 const findUser = async(where) => {
     console.log("WHERE", where);
@@ -20,7 +21,7 @@ const findUser = async(where) => {
         if (client) {
             return client;
         } else {
-            throw new ApiError('User not found 1', 400);
+            return null;
         }
     }
 };
@@ -39,7 +40,7 @@ const findUserId = async(where) => {
         if (client) {
             return client;
         } else {
-            throw new ApiError('User not found 1', 400);
+            return null
         }
     }
 };
@@ -56,11 +57,13 @@ const login = async(req, res, next) => {
         }
 
         const user = await findUser({ email: email });
-        console.log("USER_FOUND: ", user);
+        
+        if(!user){
+            res.status(200).json('User not found');
+        }
 
         if (!(await bcrypt.compare(password, user.password))) {
-            console.log(user.password);
-            throw new ApiError('User not found 2', 400);
+            res.status(200).json('Incorrect user or password');
         }
 
         const loginDate = {
@@ -93,7 +96,6 @@ const updateUser = async(req, res, next) => {
         req.isUserAuthorized(userId);
 
         const user = await findUserId({ _id: userId });
-        console.log("USER 2", user);
 
         const userPayload = {
             email: body.email,

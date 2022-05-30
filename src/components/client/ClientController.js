@@ -19,13 +19,9 @@ const clientSignup = async(req, res, next) => {
 
         // Validate user input
         if (inputArray.every((ele) => input[ele] != "" && input[ele] != undefined)) {} else {
-            throw new ApiError("All input is required", 400);
+            res.status(200).json("All input is required")
         }
-        //   if (password !== passwordConfirmation) {
-        //      throw new ApiError("Passwords do not match",400);
-        //     }
 
-        // Validamos la existencia del usuario en la base de datos
         let oldUser;
         await Client.findOne({ email: input.email }).then((client) => {
             oldUser = client;
@@ -35,7 +31,8 @@ const clientSignup = async(req, res, next) => {
 
 
         if (oldUser != null) {
-            throw new ApiError("User Already Exist. Please Login", 400);
+            res.status(200).json("User Already Exist. Please Login")
+         //   throw new ApiError("User Already Exist. Please Login", 400);
         }
 
         // Encrypt user password
@@ -77,9 +74,7 @@ const GetServices = async(req, res, next) => {
     try {
         const { body } = req;
         req.isRole('user');
-        console.log("search: ", body.search);
-        console.log("city: ", body.city);
-
+ 
         const userPayload = {
             search: body.search,
             city: body.city
@@ -155,7 +150,8 @@ const ProfileDoctor = async(req, res, next) => {
         console.log("Profile doctor: ", profileDoctor);
         //console.log("_id: ", profileDoctor);
 
-        if (!profileDoctor) return new ApiError("Profile doctor not found", 400);
+        if (!profileDoctor) return    res.status(200).json("Profile doctor not found");
+
 
         const review = await ReviewSchema.find({idDoctor: params.idDoctor }, {_id:0, idDoctor: 0});
         console.log("Review: ",review);

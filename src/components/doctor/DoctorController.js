@@ -89,12 +89,6 @@ const Addconsult = async(req, res, next) => {
             precio: body.precio,
         });
 
-
-
-
-
-
-
         consult = await consult.save();
 
         if (!consult)
