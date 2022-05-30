@@ -5,7 +5,7 @@ const ApiError = require('../../utils/ApiError');
 const bcrypt = require("bcryptjs");
 const AuthSerializer = require("../../Serializers/AuthSerializer");
 const UserSerializer = require('../../Serializers/UserSerializer');
-const { restart } = require('nodemon');
+//const { restart } = require('nodemon');
 
 const findUser = async(where) => {
     console.log("WHERE", where);
