@@ -7,6 +7,11 @@ const ScheduleSchema = Schema({
         ref: 'doctor',
         required: true
     },
+    idClient: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
     name: {
         type: String,
         required: false
@@ -15,7 +20,7 @@ const ScheduleSchema = Schema({
         type: String,
         required: false
     },
-    edad: {
+    age: {
         type: String,
         required: false
     },

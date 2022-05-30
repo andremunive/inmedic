@@ -10,7 +10,7 @@ const reject = async(req, res, next) => {
     
     try {
       const appointment = await Schedule.findByIdAndUpdate( req.body.id, {
-          status:"reject",
+          status:"rejected",
           reason:req.body.reason
       },
       {
@@ -38,7 +38,7 @@ const approve = async(req, res, next) => {
 
     try {
       const appointment = await Schedule.findByIdAndUpdate( req.body.id, {
-          status:"approve"
+          status:"approved"
       },
       {
           new:true
@@ -72,9 +72,9 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
 
         const doctorId = req.params.doctorId;
 
-        console.log("doctor id: "+doctorId)
+        const status = ['pending', 'approved'];
 
-        const appointments = await Schedule.find({ idDoctor: doctorId, status:'pending' });
+        const appointments = await Schedule.find({ idDoctor: doctorId, status:{$in: status} });
         
         if (!appointments) {
             throw new ApiError("Doctor not found", 400);
@@ -88,9 +88,43 @@ const getAppointmentsByDoctorId = async(req, res, next) => {
 
 };
 
+const getAppointmentsByClientId = async(req, res, next) => {
+
+    try {
+
+        const clientId = req.params.clientId;
+
+        const status = ['approved', 'rejected'];
+
+        const appointments = await Schedule.find({ idClient: clientId, status:{$in: status} }).populate("idDoctor");
+        
+        if (!appointments) {
+            throw new ApiError("Client not found", 400);
+        }
+
+        const response = appointments.map(function(a) {
+
+            const r = {
+                doctorName: a.idDoctor.name,
+                idCita: a._id,
+                status:a.status
+            };
+
+            return r;
+         })
+
+        res.status(200).json(response);
+        
+    } catch (err) {
+        next(err);
+    }
+
+};
+
 
 module.exports = {
     reject,
     getAppointmentsByDoctorId,
-    approve
+    approve,
+    getAppointmentsByClientId
 };

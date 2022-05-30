@@ -2,7 +2,7 @@ const Doctor = require('./DoctorModel');
 const bcrypt = require("bcryptjs");
 const ConsultSchema = require('./ConsultModel');
 const cloudinary = require('../../config/storeimages');
-const ConsultSerializer = require('../../Serializers/ConsultSerializer');
+//const ConsultSerializer = require('../../Serializers/ConsultSerializer');
 const ApiError = require('../../utils/ApiError');
 
 
@@ -73,13 +73,20 @@ const Addconsult = async(req, res, next) => {
 
         if (!doctor) throw new ApiError("User not found", 400);
 
-        const image = await cloudinary.v2.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg", { public_id: "olympic_flag" });
+        const oldDoctor = await ConsultSchema.findOne({ idDoctor: params._id });
 
-        console.log(image);
+        if (oldDoctor != null) {
+            throw new ApiError(" Profile Already Exist.", 400);
+        }
+
+
+        //const image = await cloudinary.v2.uploader.upload(body.perfil);
+
+        //console.log(image);
 
         let consult = new ConsultSchema({
             idDoctor: doctor._id,
-            perfil: image.url,
+            perfil: doctor.perfil,
             name: doctor.name + " " + doctor.lastname,
             description: body.description,
             description2: body.description2,
@@ -88,12 +95,6 @@ const Addconsult = async(req, res, next) => {
             tipoConsulta: body.tipoConsulta,
             precio: body.precio,
         });
-
-
-
-
-
-
 
         consult = await consult.save();
 

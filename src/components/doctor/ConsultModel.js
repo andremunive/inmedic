@@ -9,8 +9,7 @@ const ConsultSchema = Schema({
         required: true
     },
     perfil: {
-        type: mongoose.Schema.Types.String,
-        ref: 'doctor',
+        type: String,
         required: true
     },
     name: {

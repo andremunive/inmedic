@@ -55,7 +55,7 @@ const enviarCorreoCitaRechazada = async function enviarMail(email, appoinmentId,
     viewPath: path.join(__dirname, "templates"),
     extName: '.handlebars',
    }));
-   console.log("reason:"+ reason)
+   
   await transporter.sendMail({
     from: '"Cita" <inmedic066@gmail.com>', // sender address
     to: email, // list of receivers

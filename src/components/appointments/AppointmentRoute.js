@@ -12,4 +12,7 @@ api.post('/approve', authMiddleware, AppointmentController.approve);
 
 api.get('/getByDoctor/:doctorId', authMiddleware, AppointmentController.getAppointmentsByDoctorId);
 
+api.get('/getByClient/:clientId', authMiddleware, AppointmentController.getAppointmentsByClientId);
+
+
 module.exports = api;
